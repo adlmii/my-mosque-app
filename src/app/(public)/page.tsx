@@ -4,14 +4,11 @@ import { getPrayerTimes } from "@/services/prayer-api";
 import { PrayerTimesWidget } from "@/components/features/prayer-times/PrayerTimesWidget";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Calendar, MapPin, Heart, Quote, ChevronRight } from "lucide-react";
+import { ArrowRight, Calendar, Quote, ChevronRight, Heart } from "lucide-react";
 
 export default async function HomePage() {
-  
-  // 1. Fetch Data di Server (Server Side Rendering)
   const jadwalDefault = await getPrayerTimes();
 
-  // Data Dummy untuk Preview Kegiatan di Beranda
   const promoKegiatan = [
     {
       title: "Kajian Rutin Sabtu Malam",
@@ -36,68 +33,64 @@ export default async function HomePage() {
   return (
     <div className="flex flex-col min-h-screen">
       
-      {/* === SECTION 1: HERO & JADWAL SHOLAT === */}
-      {/* Kita beri background pattern halus supaya tidak polosan */}
-      <section className="relative py-12 md:py-20 lg:py-28 bg-slate-50 overflow-hidden">
-        {/* Dekorasi Background Abstrak */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10 pointer-events-none">
+      {/* === HERO SECTION === */}
+      <section className="relative py-20 lg:py-32 bg-slate-50 overflow-hidden">
+        {/* Dekorasi Background */}
+        <div className="absolute inset-0 overflow-hidden opacity-10 pointer-events-none">
            <div className="absolute -top-[20%] -right-[10%] w-[500px] h-[500px] rounded-full bg-primary blur-3xl"></div>
            <div className="absolute top-[20%] -left-[10%] w-[300px] h-[300px] rounded-full bg-blue-300 blur-3xl"></div>
         </div>
 
-        <div className="container mx-auto px-4 relative z-10 flex flex-col items-center space-y-6 text-center">
-          
+        <div className="container mx-auto px-4 relative z-10 flex flex-col items-center space-y-8 text-center">
           <Badge variant="outline" className="px-4 py-1 text-sm border-primary text-primary bg-primary/5">
             Ahlan Wa Sahlan
           </Badge>
           
-          <h1 className="text-4xl font-bold tracking-tighter sm:text-6xl text-slate-900">
+          <h1 className="font-serif text-5xl md:text-7xl font-bold tracking-tight text-slate-900">
             Masjid Al-Ikhlas
           </h1>
-          <p className="max-w-[700px] text-slate-500 md:text-xl leading-relaxed">
+          
+          <p className="max-w-2xl text-xl text-slate-600 leading-relaxed">
             Menjadi pusat peradaban yang memakmurkan bumi dan menyejukkan hati umat. Mari melangkah bersama menuju ridho-Nya.
           </p>
 
-          {/* WIDGET JADWAL SHOLAT */}
           <PrayerTimesWidget initialData={jadwalDefault} />
-
         </div>
       </section>
 
-      {/* === SECTION 2: QUOTE OF THE DAY === */}
-      <section className="py-12 bg-white border-y border-slate-100">
-        <div className="container mx-auto px-4 text-center max-w-3xl">
-          <Quote className="w-10 h-10 text-primary/20 mx-auto mb-4" />
-          <p className="text-xl md:text-2xl font-serif italic text-slate-700 leading-relaxed">
-            "Hanyalah yang memakmurkan masjid-masjid Allah ialah orang-orang yang beriman kepada Allah dan hari kemudian, serta tetap mendirikan shalat..."
-          </p>
-          <p className="mt-4 text-sm font-bold text-primary tracking-wide uppercase">
+      {/* === QUOTE SECTION === */}
+      <section className="py-20 bg-white border-y border-slate-100">
+        <div className="container mx-auto px-4 text-center max-w-4xl">
+          <Quote className="w-12 h-12 text-primary/20 mx-auto mb-6" />
+          <blockquote className="text-2xl md:text-4xl font-serif text-slate-900 leading-snug">
+            "Hanyalah yang memakmurkan masjid-masjid Allah ialah orang-orang yang beriman kepada Allah dan hari kemudian..."
+          </blockquote>
+          <div className="mt-6 font-bold text-primary tracking-wide uppercase text-sm">
             — Q.S. At-Taubah: 18
-          </p>
+          </div>
         </div>
       </section>
 
-      {/* === SECTION 3: SEKILAS TENTANG KAMI === */}
-      <section className="py-16 md:py-24 bg-slate-50">
+      {/* === TENTANG KAMI SECTION === */}
+      <section className="py-20 md:py-28 bg-slate-50">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Gambar */}
-            <div className="relative h-[300px] md:h-[400px] rounded-2xl overflow-hidden shadow-2xl group">
+            <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-2xl group">
               <img 
                 src="/foto-masjid-1.png" 
                 alt="Masjid Exterior" 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
             </div>
 
-            {/* Teks Deskripsi */}
             <div className="space-y-6">
-              <h2 className="text-3xl font-bold text-slate-900">Rumah Ibadah yang Nyaman & Modern</h2>
-              <p className="text-slate-600 leading-relaxed text-lg">
+              <h2 className="font-serif text-3xl md:text-4xl font-bold text-slate-900">
+                Rumah Ibadah yang Nyaman & Modern
+              </h2>
+              <p className="text-lg text-slate-600 leading-relaxed">
                 Sejak berdiri tahun 1998, Masjid Al-Ikhlas terus berbenah. Kini hadir dengan fasilitas ruang sholat ber-AC, area wudhu bersih, perpustakaan mini, dan akses ramah difabel.
               </p>
-              <ul className="space-y-3">
+              <ul className="space-y-3 mt-4">
                 {['Parkir Luas & Aman', 'Kajian Rutin Mingguan', 'TPA Berbasis Multimedia'].map((item, i) => (
                    <li key={i} className="flex items-center gap-3 text-slate-700 font-medium">
                      <div className="h-2 w-2 rounded-full bg-primary"></div>
@@ -105,7 +98,7 @@ export default async function HomePage() {
                    </li>
                 ))}
               </ul>
-              <Button asChild size="lg" className="mt-4">
+              <Button asChild size="lg" className="mt-2">
                 <Link href="/profil">
                   Baca Profil Lengkap <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -115,41 +108,41 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* === SECTION 4: KEGIATAN PILIHAN === */}
-      <section className="py-16 md:py-24 bg-white">
+      {/* === KEGIATAN SECTION === */}
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-end mb-10">
-            <div>
-              <h2 className="text-3xl font-bold text-slate-900">Agenda Terdekat</h2>
-              <p className="text-slate-500 mt-2">Jangan lewatkan kegiatan bermanfaat minggu ini.</p>
+          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+            <div className="max-w-2xl">
+              <h2 className="font-serif text-3xl md:text-4xl font-bold text-slate-900">Agenda Terdekat</h2>
+              <p className="text-lg text-slate-600 mt-3">Jangan lewatkan kegiatan bermanfaat minggu ini untuk menyuburkan iman.</p>
             </div>
-            <Button variant="ghost" asChild className="hidden md:flex text-primary">
+            <Button variant="ghost" asChild className="hidden md:flex text-primary hover:text-primary/80 hover:bg-primary/5">
               <Link href="/kegiatan">Lihat Semua <ArrowRight className="ml-2 h-4 w-4" /></Link>
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {promoKegiatan.map((item, idx) => (
-              <Card key={idx} className="group overflow-hidden border-slate-100 hover:shadow-lg transition-all cursor-pointer">
-                <div className="relative h-48 overflow-hidden">
+              <Card key={idx} className="group overflow-hidden border-slate-100 hover:shadow-xl transition-all duration-300">
+                <div className="relative h-56 overflow-hidden">
                    <img 
                     src={item.image} 
                     alt={item.title} 
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                    />
-                   <Badge className="absolute top-3 right-3 bg-white/90 text-primary hover:bg-white shadow-sm">
+                   <Badge className="absolute top-4 right-4 bg-white/90 text-slate-900 hover:bg-white shadow-sm backdrop-blur-sm">
                      {item.category}
                    </Badge>
                 </div>
-                <CardContent className="p-5 space-y-3">
-                   <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium">
-                      <Calendar className="h-3.5 w-3.5" /> {item.date}
+                <CardContent className="p-6 space-y-4">
+                   <div className="flex items-center gap-2 text-sm text-primary font-medium">
+                      <Calendar className="h-4 w-4" /> {item.date}
                    </div>
-                   <h3 className="font-bold text-lg text-slate-800 leading-snug group-hover:text-primary transition-colors">
+                   <h3 className="font-serif text-xl font-bold text-slate-900 group-hover:text-primary transition-colors">
                      {item.title}
                    </h3>
-                   <div className="pt-2 flex items-center text-sm text-primary font-medium opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                      Selengkapnya <ChevronRight className="h-3 w-3 ml-1" />
+                   <div className="pt-2 flex items-center text-sm text-slate-500 group-hover:text-primary transition-colors font-medium">
+                      Detail Kegiatan <ChevronRight className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1" />
                    </div>
                 </CardContent>
               </Card>
@@ -164,27 +157,22 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* === SECTION 5: CTA DONASI (Banner) === */}
-      <section className="py-16 bg-slate-900 relative overflow-hidden">
-        {/* Pattern Background */}
+      {/* === CTA DONASI === */}
+      <section className="py-24 bg-slate-900 relative overflow-hidden text-center">
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
-        
-        <div className="container mx-auto px-4 relative z-10 text-center">
-           <Badge variant="outline" className="mb-4 text-white border-white/20 bg-white/5 backdrop-blur-sm">
+        <div className="container mx-auto px-4 relative z-10 max-w-3xl">
+           <Badge variant="outline" className="mb-6 text-white border-white/20 bg-white/5 backdrop-blur-sm px-4 py-1">
              Ladang Amal
            </Badge>
-           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 tracking-tight">
+           <h2 className="font-serif text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
              Mari Sisihkan Harta untuk Bekal Akhirat
            </h2>
-           <p className="text-slate-300 max-w-2xl mx-auto mb-8 text-lg">
+           <p className="text-slate-300 text-lg mb-10 leading-relaxed">
              Dukungan Anda sangat berarti untuk operasional masjid dan program santunan sosial yang kami jalankan setiap bulannya.
            </p>
            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-             <Button size="lg" className="bg-primary hover:bg-primary/90 text-white font-bold px-8 shadow-lg shadow-primary/25">
+             <Button size="lg" className="bg-primary hover:bg-primary/90 text-white font-bold px-8 h-12 text-lg shadow-lg shadow-primary/25">
                <Heart className="mr-2 h-5 w-5 fill-current" /> Infaq Sekarang
-             </Button>
-             <Button variant="outline" size="lg" className="bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white">
-               Laporan Keuangan
              </Button>
            </div>
         </div>

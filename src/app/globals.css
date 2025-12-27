@@ -4,27 +4,28 @@
 
 @layer base {
   :root {
-    /* === PALET WARNA (EMERALD GREEN THEME) === */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    /* PRIMARY COLOR (HIJAU MASJID) */
+    /* HIJAU MASJID (Primary) */
     --primary: 142.1 76.2% 36.3%;
     --primary-foreground: 355.7 100% 97.3%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* WARNA PENDUKUNG */
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --secondary: 142 20% 96%;
+    --secondary-foreground: 142 30% 20%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 142 20% 96%;
+    --accent-foreground: 142 30% 20%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
@@ -33,29 +34,12 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 142.1 76.2% 36.3%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
   }
 
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 142.1 70.6% 45.3%;
-    --primary-foreground: 144.9 80.4% 10%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 142.4 71.8% 29.2%;
   }
 }
 
@@ -67,11 +51,28 @@
     @apply bg-background text-foreground;
   }
   
-  h1, h2, h3, h4, h5, h6 {
-    @apply tracking-tight font-bold text-slate-900;
+  h1 {
+    @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl font-sans text-slate-900;
   }
-  
+
+  h2 {
+    /* Judul Seksi: Pakai Font Serif biar elegan, Ukuran 3xl */
+    @apply scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0 lg:text-4xl font-serif text-slate-900;
+  }
+
+  h3 {
+    @apply scroll-m-20 text-2xl font-semibold tracking-tight font-sans text-slate-900;
+  }
+
+  h4 {
+    @apply scroll-m-20 text-xl font-semibold tracking-tight font-sans text-slate-900;
+  }
+
   p {
-    @apply leading-relaxed;
+    @apply leading-7 text-slate-600 [&:not(:first-child)]:mt-6;
+  }
+
+  .arabic-text {
+    @apply font-arabic text-3xl leading-loose text-right;
   }
 }

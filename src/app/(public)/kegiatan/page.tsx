@@ -1,78 +1,106 @@
-import { KEGIATAN_MASJID } from "@/lib/data-kegiatan";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock } from "lucide-react";
+import { Calendar, Clock, MapPin } from "lucide-react";
 
 export default function KegiatanPage() {
+  const semuaKegiatan = [
+    { title: "Kajian Tafsir Jalalain", category: "Kajian", date: "Senin, 20:00 WIB", ustadz: "Ust. Abdullah" },
+    { title: "Santunan Yatim Piatu", category: "Sosial", date: "Jumat, 13:00 WIB", ustadz: "Panitia Sosial" },
+    { title: "Tahsin Anak & Remaja", category: "Pendidikan", date: "Selasa, 16:00 WIB", ustadz: "Tim Pengajar" },
+    { title: "Subuh Keliling (Subling)", category: "Kajian", date: "Ahad, 04:30 WIB", ustadz: "Ust. Tamu" },
+    { title: "Cek Kesehatan Gratis", category: "Sosial", date: "Sabtu, 08:00 WIB", ustadz: "Tim Medis" },
+    { title: "Pesantren Kilat Liburan", category: "Pendidikan", date: "20-25 Des 2024", ustadz: "Tim DKM" },
+  ];
+
   return (
-    <div className="container mx-auto py-12 px-4">
+    <div className="min-h-screen bg-slate-50 pb-20">
       
-      {/* Header Halaman */}
-      <div className="text-center mb-12 space-y-4">
-        <h1 className="text-3xl font-bold tracking-tight text-primary sm:text-4xl">
-          Agenda & Kegiatan Masjid
-        </h1>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
-          Ikuti berbagai kegiatan positif untuk memakmurkan masjid dan mempererat tali silaturahmi antar jamaah.
-        </p>
+      {/* Header */}
+      <div className="bg-white border-b border-slate-200 py-16">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="font-serif text-4xl md:text-5xl font-bold text-slate-900 mb-4">Agenda & Kegiatan</h1>
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            Temukan jadwal kajian, kegiatan sosial, dan program pendidikan untuk memakmurkan hari-hari Anda.
+          </p>
+        </div>
       </div>
 
-      {/* Grid Card Kegiatan */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {KEGIATAN_MASJID.map((item) => (
-          <Card key={item.id} className="overflow-hidden flex flex-col hover:shadow-lg transition-shadow">
-            
-            {/* Bagian Gambar */}
-            <div className="relative h-48 w-full bg-slate-200">
-              {/* Note: Di production nanti pakai Next/Image biar cepat.
-                  Untuk sekarang pakai img biasa biar praktis. */}
-              <img 
-                src={item.image} 
-                alt={item.title}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute top-4 right-4">
-                <Badge variant="secondary" className="bg-white/90 text-primary font-bold shadow-sm hover:bg-white">
-                  {item.category}
-                </Badge>
-              </div>
-            </div>
+      <div className="container mx-auto px-4 mt-12">
+        <Tabs defaultValue="semua" className="w-full">
+          <div className="flex justify-center mb-8">
+            <TabsList className="grid w-full max-w-[400px] grid-cols-3">
+              <TabsTrigger value="semua">Semua</TabsTrigger>
+              <TabsTrigger value="kajian">Kajian</TabsTrigger>
+              <TabsTrigger value="sosial">Sosial</TabsTrigger>
+            </TabsList>
+          </div>
 
-            {/* Bagian Konten */}
-            <CardHeader>
-              <CardTitle className="line-clamp-2 leading-tight">
-                {item.title}
-              </CardTitle>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground mt-2">
-                <Clock className="h-4 w-4" />
-                <span>{item.date}</span>
-              </div>
-            </CardHeader>
-            
-            <CardContent className="flex-1">
-              <p className="text-slate-600 text-sm leading-relaxed">
-                {item.description}
-              </p>
-            </CardContent>
+          <TabsContent value="semua" className="mt-0">
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {semuaKegiatan.map((item, i) => (
+                  <KegiatanCard key={i} data={item} />
+                ))}
+             </div>
+          </TabsContent>
+          
+          {/* Contoh Filter Sederhana (Di real app pakai filter logic) */}
+          <TabsContent value="kajian" className="mt-0">
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {semuaKegiatan.filter(k => k.category === 'Kajian').map((item, i) => (
+                   <KegiatanCard key={i} data={item} />
+                ))}
+             </div>
+          </TabsContent>
 
-            <CardFooter>
-              <Button className="w-full" variant="outline">
-                Lihat Detail
-              </Button>
-            </CardFooter>
-
-          </Card>
-        ))}
+          <TabsContent value="sosial" className="mt-0">
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {semuaKegiatan.filter(k => k.category === 'Sosial').map((item, i) => (
+                   <KegiatanCard key={i} data={item} />
+                ))}
+             </div>
+          </TabsContent>
+        </Tabs>
       </div>
-
     </div>
   );
+}
+
+// Komponen Kecil untuk Kartu
+function KegiatanCard({ data }: { data: any }) {
+  return (
+    <Card className="hover:shadow-lg transition-shadow duration-300 border-slate-200 overflow-hidden flex flex-col h-full">
+      <div className="h-48 bg-slate-200 relative">
+        {/* Placeholder Gambar */}
+        <div className="absolute top-3 left-3">
+          <Badge className="bg-white/90 text-slate-900 hover:bg-white backdrop-blur-sm">
+             {data.category}
+          </Badge>
+        </div>
+      </div>
+      <CardHeader className="p-5 pb-2">
+        <h3 className="font-serif text-xl font-bold text-slate-900 leading-snug line-clamp-2">
+          {data.title}
+        </h3>
+      </CardHeader>
+      <CardContent className="p-5 pt-2 space-y-3 flex-1">
+        <div className="flex items-center gap-2 text-sm text-slate-600">
+           <Calendar className="w-4 h-4 text-primary" /> 
+           <span>{data.date}</span>
+        </div>
+        <div className="flex items-center gap-2 text-sm text-slate-600">
+           <MapPin className="w-4 h-4 text-primary" /> 
+           <span>Masjid Al-Ikhlas</span>
+        </div>
+        <div className="flex items-center gap-2 text-sm text-slate-600">
+           <Clock className="w-4 h-4 text-primary" /> 
+           <span>{data.ustadz}</span>
+        </div>
+      </CardContent>
+      <CardFooter className="p-5 pt-0">
+        <Button variant="outline" className="w-full">Detail</Button>
+      </CardFooter>
+    </Card>
+  )
 }

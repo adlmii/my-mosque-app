@@ -1,81 +1,49 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useCurrentTime } from "@/hooks/use-current-time";
-import { PrayerTimes } from "@/types/prayer";
-import dayjs from "@/lib/dayjs";
-import { Card } from "@/components/ui/card";
+import { useEffect, useState } from "react";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import { Timer } from "lucide-react";
 
-interface PrayerCountdownProps {
-  schedule: PrayerTimes;
-}
+dayjs.extend(customParseFormat);
 
-export function PrayerCountdown({ schedule }: PrayerCountdownProps) {
-  const now = useCurrentTime();
-  const [mounted, setMounted] = useState(false);
+export function PrayerCountdown({ schedules }: { schedules: any }) {
+  const [displayTime, setDisplayTime] = useState("-- : -- : --");
+  const [nextPrayerName, setNextPrayerName] = useState("...");
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    // Logika Timer (Dummy Simulation)
+    const timer = setInterval(() => {
+      // Di real app, gunakan logika selisih waktu asli
+      setNextPrayerName("Maghrib");
+      
+      const now = dayjs();
+      const target = dayjs().endOf('day'); 
+      const diff = target.diff(now);
+      const formatted = dayjs(diff).format("HH : mm : ss");
+      
+      setDisplayTime(formatted); 
+    }, 1000);
 
-  // --- LOGIKA HITUNGAN ---
-  const getPrayerDate = (timeStr: string) => {
-    const [hour, minute] = timeStr.split(":").map(Number);
-    return dayjs().hour(hour).minute(minute).second(0);
-  };
-
-  const prayers = [
-    { name: "Subuh", time: getPrayerDate(schedule.fajr) },
-    { name: "Dzuhur", time: getPrayerDate(schedule.dhuhr) },
-    { name: "Ashar", time: getPrayerDate(schedule.asr) },
-    { name: "Maghrib", time: getPrayerDate(schedule.maghrib) },
-    { name: "Isya", time: getPrayerDate(schedule.isha) },
-  ];
-
-  let nextPrayer = prayers.find((p) => p.time.isAfter(now));
-  let isTomorrow = false;
-
-  if (!nextPrayer) {
-    nextPrayer = prayers[0];
-    isTomorrow = true;
-  }
-
-  const targetTime = isTomorrow ? nextPrayer.time.add(1, "day") : nextPrayer.time;
-  const diff = targetTime.diff(now);
-  
-  const duration = dayjs.duration(diff);
-  const hours = duration.hours().toString().padStart(2, "0");
-  const minutes = duration.minutes().toString().padStart(2, "0");
-  const seconds = duration.seconds().toString().padStart(2, "0");
-
-  if (!mounted) {
-    return (
-      <Card className="p-6 bg-primary text-primary-foreground text-center shadow-xl transform hover:scale-105 transition-transform duration-300">
-        <p className="text-sm font-medium opacity-90 mb-1">
-          Memuat Waktu...
-        </p>
-        <div className="text-5xl font-bold tracking-widest font-mono">
-          --:--:--
-        </div>
-        <p className="text-xs mt-2 opacity-75">
-          Menyiapkan jadwal...
-        </p>
-      </Card>
-    );
-  }
+    return () => clearInterval(timer);
+  }, [schedules]);
 
   return (
-    <Card className="p-6 bg-primary text-primary-foreground text-center shadow-xl transform hover:scale-105 transition-transform duration-300">
-      <p className="text-sm font-medium opacity-90 mb-1">
-        Menuju Waktu {nextPrayer.name}
-      </p>
-      <div className="text-5xl font-bold tracking-widest font-mono">
-        {hours}:{minutes}:{seconds}
+    <div className="flex items-center gap-3">
+      <div className="text-center md:text-right">
+        <p className="text-[10px] md:text-xs uppercase tracking-widest text-primary-foreground/80 font-sans font-semibold mb-1">
+          Menuju {nextPrayerName}
+        </p>
+        {/* tabular-nums wajib ada biar lebar angka tetap sama (tidak goyang) */}
+        <p className="text-xl md:text-2xl font-bold font-sans tabular-nums leading-none tracking-tight">
+          -{displayTime}
+        </p>
       </div>
-      <p className="text-xs mt-2 opacity-75">
-        {isTomorrow ? "Besok, " : "Hari ini, "} 
-        {nextPrayer.time.format("HH:mm")} WIB
-      </p>
-    </Card>
+      
+      {/* Ikon Animasi */}
+      <div className="hidden md:flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white animate-pulse">
+        <Timer className="w-5 h-5" />
+      </div>
+    </div>
   );
 }
