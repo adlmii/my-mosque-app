@@ -19,80 +19,88 @@ export function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        
-        {/* === LOGO (Font Serif) === */}
-        <div className="flex items-center gap-2">
-          <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold font-serif shadow-sm">
-            M
-          </div>
-          <Link href="/" className="flex flex-col">
-            <span className="font-serif font-bold text-lg leading-none tracking-tight text-slate-900">
-              Al-Ikhlas
-            </span>
-            <span className="text-[10px] uppercase tracking-widest text-slate-500 font-sans font-medium">
-              Pusat Peradaban
-            </span>
+    <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/95 backdrop-blur-md shadow-sm">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          
+          {/* === LOGO === */}
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="h-9 w-9 bg-primary rounded-lg flex items-center justify-center text-white font-bold font-serif shadow-sm group-hover:shadow-md transition-shadow">
+              M
+            </div>
+            <div className="flex flex-col">
+              <span className="font-serif font-bold text-lg leading-tight tracking-tight text-slate-900 group-hover:text-primary transition-colors">
+                Al-Ikhlas
+              </span>
+              <span className="text-[9px] uppercase tracking-[0.15em] text-slate-500 font-sans font-semibold">
+                Pusat Peradaban
+              </span>
+            </div>
           </Link>
-        </div>
 
-        {/* === MENU DESKTOP (Font Sans) === */}
-        <nav className="hidden md:flex items-center gap-8">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "text-sm font-medium transition-colors hover:text-primary font-sans",
-                pathname === item.href
-                  ? "text-primary font-bold"
-                  : "text-slate-600"
-              )}
+          {/* === MENU DESKTOP === */}
+          <nav className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 font-sans",
+                  pathname === item.href
+                    ? "text-primary bg-primary/5"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                )}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </nav>
+
+          {/* === CTA BUTTON === */}
+          <div className="flex items-center gap-3">
+            <Button 
+              size="sm" 
+              className="hidden sm:flex bg-primary hover:bg-primary/90 text-white font-sans font-semibold gap-2 shadow-sm hover:shadow-md transition-all"
             >
-              {item.name}
-            </Link>
-          ))}
-        </nav>
+              <Heart className="w-4 h-4 fill-current" />
+              Infaq
+            </Button>
 
-        {/* === BUTTONS === */}
-        <div className="flex items-center gap-4">
-          <Button size="sm" className="hidden sm:flex bg-primary hover:bg-primary/90 text-white font-sans gap-2 shadow-md shadow-primary/20 transition-all hover:-translate-y-0.5">
-            <Heart className="w-4 h-4 fill-current" />
-            Infaq
-          </Button>
-
-          <button
-            className="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-md transition-colors"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+            <button
+              className="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label="Toggle menu"
+            >
+              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
       </div>
 
       {/* === MOBILE MENU === */}
       {isOpen && (
-        <div className="md:hidden border-t border-slate-100 bg-white p-4 absolute w-full shadow-xl flex flex-col gap-2 animate-in slide-in-from-top-2">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setIsOpen(false)}
-              className={cn(
-                "px-4 py-3 rounded-md text-sm font-medium transition-colors font-sans",
-                pathname === item.href
-                  ? "bg-primary/10 text-primary"
-                  : "hover:bg-slate-50 text-slate-600"
-              )}
-            >
-              {item.name}
-            </Link>
-          ))}
-          <Button className="w-full mt-2 gap-2 font-sans bg-primary text-white">
-            <Heart className="w-4 h-4 fill-current" />
-            Infaq Sekarang
-          </Button>
+        <div className="md:hidden border-t border-slate-100 bg-white shadow-lg">
+          <div className="container mx-auto px-4 py-4 flex flex-col gap-1">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setIsOpen(false)}
+                className={cn(
+                  "px-4 py-3 rounded-lg text-sm font-semibold transition-all font-sans",
+                  pathname === item.href
+                    ? "bg-primary/10 text-primary"
+                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                )}
+              >
+                {item.name}
+              </Link>
+            ))}
+            <Button className="w-full mt-3 gap-2 font-sans font-semibold bg-primary hover:bg-primary/90 text-white">
+              <Heart className="w-4 h-4 fill-current" />
+              Infaq Sekarang
+            </Button>
+          </div>
         </div>
       )}
     </header>

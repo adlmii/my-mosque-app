@@ -47,32 +47,139 @@
   * {
     @apply border-border;
   }
+  
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
   
+  /* ============================================
+     TYPOGRAPHY SYSTEM - COMPREHENSIVE SCALE
+     ============================================ */
+  
+  /* DISPLAY HEADINGS - Hero Sections */
+  .display-xl {
+    @apply font-serif text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight text-slate-900 leading-[0.95];
+  }
+  
+  .display-lg {
+    @apply font-serif text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[1];
+  }
+  
+  .display-md {
+    @apply font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 leading-[1.05];
+  }
+
+  /* HEADING LEVELS - Section Titles */
   h1 {
-    @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl font-sans text-slate-900;
+    @apply font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 leading-tight;
   }
 
   h2 {
-    /* Judul Seksi: Pakai Font Serif biar elegan, Ukuran 3xl */
-    @apply scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0 lg:text-4xl font-serif text-slate-900;
+    @apply font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 leading-tight;
   }
 
   h3 {
-    @apply scroll-m-20 text-2xl font-semibold tracking-tight font-sans text-slate-900;
+    @apply font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-slate-900 leading-snug;
   }
 
   h4 {
-    @apply scroll-m-20 text-xl font-semibold tracking-tight font-sans text-slate-900;
+    @apply font-sans text-xl sm:text-2xl font-bold tracking-tight text-slate-900 leading-snug;
   }
 
+  h5 {
+    @apply font-sans text-lg sm:text-xl font-bold text-slate-900 leading-normal;
+  }
+
+  h6 {
+    @apply font-sans text-base sm:text-lg font-bold text-slate-900 leading-normal;
+  }
+
+  /* BODY TEXT */
   p {
-    @apply leading-7 text-slate-600 [&:not(:first-child)]:mt-6;
+    @apply font-sans text-base sm:text-lg leading-relaxed text-slate-600 [&:not(:first-child)]:mt-4;
   }
 
+  /* LEAD TEXT - Opening paragraphs */
+  .lead {
+    @apply font-sans text-lg sm:text-xl lg:text-2xl leading-relaxed text-slate-600 font-normal;
+  }
+
+  /* SMALL TEXT */
+  .text-small {
+    @apply font-sans text-sm leading-relaxed text-slate-500;
+  }
+
+  .text-xs-custom {
+    @apply font-sans text-xs leading-normal text-slate-500;
+  }
+
+  /* LABELS & BADGES */
+  .label {
+    @apply font-sans text-xs sm:text-sm font-bold uppercase tracking-[0.1em] text-slate-500;
+  }
+
+  .label-primary {
+    @apply font-sans text-xs sm:text-sm font-bold uppercase tracking-[0.1em] text-primary;
+  }
+
+  /* ARABIC TEXT */
   .arabic-text {
-    @apply font-arabic text-3xl leading-loose text-right;
+    @apply font-arabic text-2xl sm:text-3xl lg:text-4xl leading-loose text-right text-slate-900;
+  }
+
+  /* QUOTES */
+  blockquote {
+    @apply font-serif text-2xl sm:text-3xl lg:text-4xl font-medium leading-snug text-slate-900 italic;
+  }
+
+  /* NUMBERS & DATA */
+  .number-display {
+    @apply font-sans text-4xl sm:text-5xl lg:text-6xl font-black tabular-nums tracking-tight text-slate-900;
+  }
+
+  .time-display {
+    @apply font-sans text-2xl sm:text-3xl lg:text-4xl font-bold tabular-nums tracking-tight text-slate-900;
+  }
+
+  /* LINKS */
+  a {
+    @apply text-primary hover:text-primary/80 transition-colors duration-200 font-medium;
+  }
+
+  /* UTILITY CLASSES */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .font-optimized {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+/* ============================================
+   COMPONENT-SPECIFIC TYPOGRAPHY
+   ============================================ */
+@layer components {
+  /* Button Typography */
+  .btn-text {
+    @apply font-sans text-sm sm:text-base font-semibold tracking-wide;
+  }
+
+  /* Card Title */
+  .card-title {
+    @apply font-serif text-xl sm:text-2xl font-bold text-slate-900 leading-tight;
+  }
+
+  /* Section Header */
+  .section-header {
+    @apply font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight leading-tight mb-4;
+  }
+
+  /* Section Description */
+  .section-description {
+    @apply font-sans text-base sm:text-lg lg:text-xl text-slate-600 leading-relaxed max-w-3xl;
   }
 }

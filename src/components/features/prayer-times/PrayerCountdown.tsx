@@ -12,9 +12,7 @@ export function PrayerCountdown({ schedules }: { schedules: any }) {
   const [nextPrayerName, setNextPrayerName] = useState("...");
 
   useEffect(() => {
-    // Logika Timer (Dummy Simulation)
     const timer = setInterval(() => {
-      // Di real app, gunakan logika selisih waktu asli
       setNextPrayerName("Maghrib");
       
       const now = dayjs();
@@ -34,7 +32,6 @@ export function PrayerCountdown({ schedules }: { schedules: any }) {
         <p className="text-[10px] md:text-xs uppercase tracking-widest text-primary-foreground/80 font-sans font-semibold mb-1">
           Menuju {nextPrayerName}
         </p>
-        {/* tabular-nums wajib ada biar lebar angka tetap sama (tidak goyang) */}
         <p className="text-xl md:text-2xl font-bold font-sans tabular-nums leading-none tracking-tight">
           -{displayTime}
         </p>
