@@ -12,16 +12,47 @@ export function PrayerCountdown({ schedules }: { schedules: any }) {
   const [nextPrayerName, setNextPrayerName] = useState("...");
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setNextPrayerName("Maghrib"); // Logic placeholder
-      
+    if (!schedules) return;
+
+    const calculateCountdown = () => {
       const now = dayjs();
-      const target = dayjs().endOf('day'); 
-      const diff = target.diff(now);
-      const formatted = dayjs(diff).format("HH : mm : ss");
       
-      setDisplayTime(formatted); 
-    }, 1000);
+      // Daftar waktu sholat hari ini
+      const prayers = [
+        { name: "Subuh", time: dayjs(schedules.fajr, "HH:mm") },
+        { name: "Dzuhur", time: dayjs(schedules.dhuhr, "HH:mm") },
+        { name: "Ashar", time: dayjs(schedules.asr, "HH:mm") },
+        { name: "Maghrib", time: dayjs(schedules.maghrib, "HH:mm") },
+        { name: "Isya", time: dayjs(schedules.isha, "HH:mm") },
+      ];
+
+      // Cari waktu sholat yang BELUM lewat (waktu sholat > sekarang)
+      let nextPrayer = prayers.find((p) => p.time.isAfter(now));
+      
+      // Jika semua sudah lewat (setelah Isya), maka targetnya adalah Subuh BESOK
+      if (!nextPrayer) {
+        nextPrayer = {
+          name: "Subuh",
+          time: dayjs(schedules.fajr, "HH:mm").add(1, "day"),
+        };
+      }
+
+      setNextPrayerName(nextPrayer.name);
+
+      // Hitung selisih waktu
+      const diffMs = nextPrayer.time.diff(now);
+      
+      // Format durasi manual agar presisi (HH:mm:ss)
+      const hours = Math.floor(diffMs / 3600000);
+      const minutes = Math.floor((diffMs % 3600000) / 60000);
+      const seconds = Math.floor((diffMs % 60000) / 1000);
+
+      const formatNum = (n: number) => n.toString().padStart(2, "0");
+      setDisplayTime(`${formatNum(hours)} : ${formatNum(minutes)} : ${formatNum(seconds)}`);
+    };
+
+    calculateCountdown();
+    const timer = setInterval(calculateCountdown, 1000);
 
     return () => clearInterval(timer);
   }, [schedules]);

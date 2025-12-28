@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { MASJID_INFO } from "@/lib/data-masjid";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -30,10 +31,10 @@ export function Navbar() {
             </div>
             <div className="flex flex-col">
               <span className="font-serif font-bold text-xl leading-none text-foreground group-hover:text-primary transition-colors">
-                Al-Huda
+                {MASJID_INFO.namaSingkat}
               </span>
               <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-sans font-bold mt-1">
-                Pusat Peradaban
+                {MASJID_INFO.tagline}
               </span>
             </div>
           </Link>

@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { cn } from "@/lib/utils";
+import { MASJID_INFO } from "@/lib/data-masjid"; 
 
 const fontSans = Plus_Jakarta_Sans({ 
   subsets: ["latin"],
@@ -23,9 +24,13 @@ const fontArabic = Amiri({
   weight: ["400", "700"],
 });
 
+// Metadata Dinamis
 export const metadata: Metadata = {
-  title: "Masjid Al-Ikhlas | Pusat Peradaban Umat",
-  description: "Portal resmi Masjid Al-Ikhlas.",
+  title: {
+    default: `${MASJID_INFO.nama} | ${MASJID_INFO.tagline}`,
+    template: `%s | ${MASJID_INFO.nama}`,
+  },
+  description: `Portal resmi ${MASJID_INFO.nama}. ${MASJID_INFO.alamat}`,
   icons: { icon: "/favicon.ico" },
 };
 

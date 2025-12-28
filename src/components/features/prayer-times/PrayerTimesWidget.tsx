@@ -6,6 +6,7 @@ import { MapPin, Sunrise, Sun, CloudSun, Sunset, MoonStar } from "lucide-react";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import "dayjs/locale/id";
+import { getCurrentPrayerTime } from "@/lib/prayer-utils"; 
 
 dayjs.extend(customParseFormat);
 dayjs.locale("id");
@@ -24,36 +25,18 @@ export function PrayerTimesWidget({ initialData }: PrayerTimesWidgetProps) {
     if (!initialData) return;
 
     const updateTimeAndStatus = () => {
-      const currentTime = dayjs();
-      setNow(currentTime);
+      // 1. Update Waktu Sekarang
+      setNow(dayjs());
 
-      const getPrayerTimeObj = (timeStr: string) => dayjs(timeStr, "HH:mm");
-
-      const subuhTime = getPrayerTimeObj(initialData.fajr);
-      const dzuhurTime = getPrayerTimeObj(initialData.dhuhr);
-      const asharTime = getPrayerTimeObj(initialData.asr);
-      const maghribTime = getPrayerTimeObj(initialData.maghrib);
-      const isyaTime = getPrayerTimeObj(initialData.isha);
-
-      let currentActive = "Isya"; 
-
-      // Logic Penentuan Aktif (Sama persis dengan jadwal/page)
-      if (currentTime.isAfter(subuhTime) && currentTime.isBefore(dzuhurTime)) {
-        currentActive = "Subuh";
-      } else if (currentTime.isAfter(dzuhurTime) && currentTime.isBefore(asharTime)) {
-        currentActive = "Dzuhur";
-      } else if (currentTime.isAfter(asharTime) && currentTime.isBefore(maghribTime)) {
-        currentActive = "Ashar";
-      } else if (currentTime.isAfter(maghribTime) && currentTime.isBefore(isyaTime)) {
-        currentActive = "Maghrib";
-      } else if (currentTime.isAfter(isyaTime) || currentTime.isBefore(subuhTime)) {
-        currentActive = "Isya";
-      }
-      
+      // 2. Update Status Sholat Aktif (Logic diambil dari file utils)
+      const currentActive = getCurrentPrayerTime(initialData);
       setActivePrayer(currentActive);
     };
 
+    // Jalankan sekali saat mount
     updateTimeAndStatus();
+
+    // Jalankan setiap detik agar jam terus berjalan
     const timer = setInterval(updateTimeAndStatus, 1000);
 
     return () => clearInterval(timer);
@@ -61,7 +44,7 @@ export function PrayerTimesWidget({ initialData }: PrayerTimesWidgetProps) {
 
   if (!initialData) return null;
 
-  // Mapping Data (Sama persis dengan jadwal/page)
+  // Mapping Ikon
   const icons: Record<string, any> = {
     Subuh: <Sunrise className="w-6 h-6" />,
     Dzuhur: <Sun className="w-6 h-6" />,
@@ -70,6 +53,7 @@ export function PrayerTimesWidget({ initialData }: PrayerTimesWidgetProps) {
     Isya: <MoonStar className="w-6 h-6" />,
   };
 
+  // Mapping Data Jadwal
   const prayerMap = [
     { name: "Subuh", time: initialData.fajr },
     { name: "Dzuhur", time: initialData.dhuhr },
@@ -81,8 +65,6 @@ export function PrayerTimesWidget({ initialData }: PrayerTimesWidgetProps) {
   if (!mounted) return null;
 
   return (
-    // Wrapper di sini hanya mt-10 (tidak ada max-w pembatas)
-    // Sesuai dengan jadwal/page yang menggunakan container bawaan
     <div className="w-full mt-10 relative z-20 font-optimized">
       <Card className="border-none shadow-2xl bg-gradient-to-br from-primary via-primary to-emerald-950 text-primary-foreground overflow-hidden rounded-3xl ring-1 ring-white/20 relative group">
           
@@ -93,7 +75,7 @@ export function PrayerTimesWidget({ initialData }: PrayerTimesWidgetProps) {
 
         <div className="p-8 md:p-12 relative z-10">
           
-          {/* === Top Section === */}
+          {/* === Top Section: Jam & Tanggal === */}
           <div className="flex flex-col lg:flex-row justify-between items-center gap-10 mb-12">
             
             <div className="text-center lg:text-left space-y-3">
@@ -101,7 +83,7 @@ export function PrayerTimesWidget({ initialData }: PrayerTimesWidgetProps) {
                 <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse box-shadow-glow"></span>
                 Hari Ini
               </div>
-              {/* Ukuran Font Tanggal Sama Persis */}
+              
               <h2 className="text-4xl md:text-5xl font-serif font-bold text-white leading-tight drop-shadow-sm">
                 {now.format("dddd,")} <br className="hidden md:block" /> 
                 <span className="text-white/90">{now.format("D MMMM YYYY")}</span>
@@ -166,7 +148,6 @@ export function PrayerTimesWidget({ initialData }: PrayerTimesWidgetProps) {
                      <p className={`text-xs font-bold uppercase tracking-[0.2em] transition-colors ${isActive ? "text-emerald-600/70" : "text-white/60 group-hover/card:text-white/90"}`}>
                        {p.name}
                      </p>
-                     {/* Ukuran Font Waktu Sama Persis */}
                      <p className={`text-2xl md:text-3xl font-bold font-sans tabular-nums tracking-tight transition-transform duration-300 ${isActive ? "text-emerald-950 scale-100" : "text-white group-hover/card:scale-105 origin-left"}`}>
                        {p.time}
                      </p>

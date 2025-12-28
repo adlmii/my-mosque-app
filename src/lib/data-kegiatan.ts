@@ -32,3 +32,12 @@ export const KEGIATAN_MASJID = [
     image: "https://images.unsplash.com/photo-1564121211835-e88c852648ab?q=80&w=600&auto=format&fit=crop",
   },
 ];
+
+export const AGENDA_KEGIATAN = [
+  { title: "Kajian Tafsir Jalalain", category: "Kajian", date: "Senin, 20:00 WIB", ustadz: "Ust. Abdullah" },
+  { title: "Santunan Yatim Piatu", category: "Sosial", date: "Jumat, 13:00 WIB", ustadz: "Panitia Sosial" },
+  { title: "Tahsin Anak & Remaja", category: "Pendidikan", date: "Selasa, 16:00 WIB", ustadz: "Tim Pengajar" },
+  { title: "Subuh Keliling (Subling)", category: "Kajian", date: "Ahad, 04:30 WIB", ustadz: "Ust. Tamu" },
+  { title: "Cek Kesehatan Gratis", category: "Sosial", date: "Sabtu, 08:00 WIB", ustadz: "Tim Medis" },
+  { title: "Pesantren Kilat Liburan", category: "Pendidikan", date: "20-25 Des 2024", ustadz: "Tim DKM" },
+];

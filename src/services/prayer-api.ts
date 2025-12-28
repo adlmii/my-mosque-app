@@ -1,9 +1,10 @@
 import { PrayerApiResponse, PrayerTimes } from "@/types/prayer";
 import dayjs from "@/lib/dayjs";
+import { MASJID_INFO } from "@/lib/data-masjid";
 
-// Lokasi Default: Masjid Istiqlal, Jakarta
-const DEFAULT_LAT = -6.1702;
-const DEFAULT_LNG = 106.8310;
+// Lokasi Default: Ambil dari Data Masjid
+const DEFAULT_LAT = MASJID_INFO.coordinates.lat;
+const DEFAULT_LNG = MASJID_INFO.coordinates.lng;
 
 interface MonthlyApiResponse {
   code: number;
