@@ -36,13 +36,17 @@ export default async function JadwalPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 font-optimized pb-24">
+    <div className="min-h-screen bg-gradient-to-b from-secondary/10 via-white to-accent/20 font-optimized pb-24 relative overflow-hidden">
+      
+      {/* Decorative Background Elements */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-secondary/20 rounded-full blur-3xl pointer-events-none"></div>
       
       {/* === HERO SECTION === */}
-      <section className="bg-white border-b border-border/60 pt-20 pb-16">
-        <div className="container mx-auto px-4 text-center max-w-4xl">
+      <section className="bg-gradient-to-br from-white via-secondary/5 to-accent/10 border-b border-border/60 pt-20 pb-16 relative">
+        <div className="container mx-auto px-4 text-center max-w-4xl relative z-10">
           <FadeIn>
-            <Badge variant="outline" className="mb-6 px-4 py-1.5 border-primary/20 bg-primary/5 text-primary font-bold tracking-wider">
+            <Badge variant="outline" className="mb-6 px-4 py-1.5 border-primary/20 bg-white/80 backdrop-blur-sm text-primary font-bold tracking-wider shadow-sm">
               SHOLAT ITU TIANG AGAMA
             </Badge>
             <h1 className="display-md mb-6 text-foreground">
@@ -91,7 +95,7 @@ export default async function JadwalPage() {
                 </CardContent>
               </Card>
 
-              <div className="bg-primary/5 border border-primary/10 rounded-xl p-6 relative overflow-hidden mt-6">
+              <div className="bg-gradient-to-br from-primary/5 to-accent/10 border border-primary/10 rounded-xl p-6 relative overflow-hidden mt-6">
                 <div className="absolute top-0 right-0 -mt-2 -mr-2 w-12 h-12 bg-primary/10 rounded-full blur-xl"></div>
                 <h4 className="font-bold text-primary mb-2 text-sm flex items-center gap-2">
                   <Info className="w-4 h-4" />
@@ -108,7 +112,7 @@ export default async function JadwalPage() {
           <div className="lg:col-span-3">
             <FadeIn delay={0.4}>
               <Card className="border-border shadow-lg bg-white overflow-hidden">
-                <CardHeader className="border-b border-border/50 bg-secondary/30 px-6 py-5 flex flex-row items-center justify-between">
+                <CardHeader className="border-b border-border/50 bg-gradient-to-r from-secondary/30 to-accent/20 px-6 py-5 flex flex-row items-center justify-between">
                   <div>
                     <CardTitle className="font-serif text-xl font-bold text-foreground">Jadwal {currentMonthName}</CardTitle>
                     <p className="text-sm text-muted-foreground mt-1 font-sans">Waktu Indonesia Barat (WIB)</p>
@@ -118,7 +122,7 @@ export default async function JadwalPage() {
                 <div className="overflow-x-auto">
                   <Table>
                     <TableHeader>
-                      <TableRow className="bg-transparent hover:bg-transparent border-b border-border/60">
+                      <TableRow className="bg-gradient-to-r from-secondary/20 to-accent/10 hover:from-secondary/20 hover:to-accent/10 border-b border-border/60">
                         <TableHead className="w-[180px] font-bold text-foreground py-5 pl-6">Tanggal</TableHead>
                         <TableHead className="font-bold text-foreground text-center">Subuh</TableHead>
                         <TableHead className="font-bold text-foreground text-center">Dzuhur</TableHead>
@@ -133,7 +137,7 @@ export default async function JadwalPage() {
                           key={idx} 
                           className={`
                             transition-colors border-b border-border/40 font-sans
-                            ${item.isToday ? "bg-primary/5 hover:bg-primary/10" : "hover:bg-secondary/30"}
+                            ${item.isToday ? "bg-primary/5 hover:bg-primary/10" : "hover:bg-secondary/20"}
                           `}
                         >
                           <TableCell className="pl-6 py-4">

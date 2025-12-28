@@ -14,11 +14,18 @@ export const metadata: Metadata = {
 
 export default function KegiatanPage() {
   return (
-    <div className="min-h-screen bg-secondary/10 pb-20 font-optimized">
+    <div className="min-h-screen bg-gradient-to-b from-secondary/10 via-white to-accent/20 pb-20 font-optimized relative overflow-hidden">
+      
+      {/* Decorative Background */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-secondary/20 rounded-full blur-3xl pointer-events-none"></div>
       
       {/* Header */}
-      <div className="bg-white border-b border-border/60 py-16 md:py-20">
-        <div className="container mx-auto px-4 text-center space-y-4">
+      <div className="bg-gradient-to-br from-white via-accent/5 to-secondary/10 border-b border-border/60 py-16 md:py-20 relative">
+        {/* Pattern Overlay */}
+        <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(circle, hsl(var(--primary)) 1px, transparent 1px)', backgroundSize: '25px 25px' }}></div>
+        
+        <div className="container mx-auto px-4 text-center space-y-4 relative z-10">
           <FadeIn>
             <h1 className="mb-4">Agenda & Kegiatan</h1>
             <p className="lead max-w-2xl mx-auto">
@@ -28,11 +35,11 @@ export default function KegiatanPage() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 mt-12">
+      <div className="container mx-auto px-4 mt-12 relative z-10">
         <Tabs defaultValue="semua" className="w-full">
           <FadeIn delay={0.2}>
             <div className="flex justify-center mb-10">
-              <TabsList className="grid w-full max-w-[400px] grid-cols-3 h-auto p-1 bg-white border border-border shadow-sm rounded-lg">
+              <TabsList className="grid w-full max-w-[400px] grid-cols-3 h-auto p-1 bg-white/80 backdrop-blur-sm border border-border shadow-sm rounded-lg">
                 <TabsTrigger value="semua" className="py-2.5 font-sans font-semibold data-[state=active]:bg-primary data-[state=active]:text-white">Semua</TabsTrigger>
                 <TabsTrigger value="kajian" className="py-2.5 font-sans font-semibold data-[state=active]:bg-primary data-[state=active]:text-white">Kajian</TabsTrigger>
                 <TabsTrigger value="sosial" className="py-2.5 font-sans font-semibold data-[state=active]:bg-primary data-[state=active]:text-white">Sosial</TabsTrigger>
@@ -74,8 +81,8 @@ function KegiatanGrid({ data }: { data: typeof AGENDA_KEGIATAN }) {
 // Komponen Kartu
 function KegiatanCard({ data }: { data: any }) {
   return (
-    <Card className="group hover:shadow-xl transition-all duration-300 border-border overflow-hidden flex flex-col h-full bg-white">
-      <div className="h-52 bg-secondary/30 relative overflow-hidden">
+    <Card className="group hover:shadow-xl transition-all duration-300 border-border overflow-hidden flex flex-col h-full bg-white/95 backdrop-blur-sm">
+      <div className="h-52 bg-gradient-to-br from-secondary/20 to-accent/10 relative overflow-hidden">
         {/* Placeholder warna/gambar */}
         <div className="w-full h-full bg-secondary/20 transition-transform duration-700 group-hover:scale-105" />
         <div className="absolute top-4 left-4">

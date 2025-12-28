@@ -7,8 +7,13 @@ import { MASJID_INFO } from "@/lib/data-masjid";
 
 export function MosqueMap() {
   return (
-    <section className="py-20 lg:py-24 bg-secondary/10 font-optimized">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-20 lg:py-24 bg-gradient-to-b from-secondary/10 via-accent/5 to-white font-optimized relative overflow-hidden">
+      
+      {/* Decorative Background */}
+      <div className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-0 right-0 w-80 h-80 bg-secondary/20 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         <div className="flex flex-col md:flex-row gap-12 items-center">
           
@@ -28,7 +33,7 @@ export function MosqueMap() {
              </div>
 
              <div className="space-y-4">
-                <div className="flex items-start gap-4 p-4 bg-white rounded-xl border border-border/50 shadow-sm">
+                <div className="flex items-start gap-4 p-4 bg-white/95 backdrop-blur-sm rounded-xl border border-border/50 shadow-sm">
                    <div className="p-2 bg-primary/10 rounded-lg text-primary">
                      <MapPin className="w-5 h-5" />
                    </div>

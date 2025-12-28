@@ -19,10 +19,18 @@ const DATA_KEUANGAN = [
 
 export default function LaporanPage() {
   return (
-    <div className="min-h-screen bg-slate-50 font-optimized pb-20">
-      <section className="bg-white border-b border-border/60 py-16 md:py-20">
-        <div className="container mx-auto px-4 text-center max-w-3xl">
-          <Badge variant="outline" className="mb-6 px-4 py-1.5 border-primary/20 bg-primary/5 text-primary">
+    <div className="min-h-screen bg-gradient-to-b from-secondary/10 via-white to-accent/20 font-optimized pb-20 relative overflow-hidden">
+      
+      {/* Decorative Background */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-secondary/20 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <section className="bg-gradient-to-br from-white via-accent/5 to-secondary/10 border-b border-border/60 py-16 md:py-20 relative">
+        {/* Pattern Overlay */}
+        <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'linear-gradient(hsl(var(--border)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border)) 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+        
+        <div className="container mx-auto px-4 text-center max-w-3xl relative z-10">
+          <Badge variant="outline" className="mb-6 px-4 py-1.5 border-primary/20 bg-white/80 backdrop-blur-sm text-primary">
             Transparansi Umat
           </Badge>
           <h1 className="mb-4 text-4xl font-bold font-serif text-foreground">Laporan Keuangan</h1>
@@ -33,11 +41,11 @@ export default function LaporanPage() {
       </section>
 
       <div className="container mx-auto px-4 -mt-8 relative z-10">
-        <Card className="border-border shadow-lg bg-white overflow-hidden max-w-4xl mx-auto">
+        <Card className="border-border shadow-lg bg-white/95 backdrop-blur-sm overflow-hidden max-w-4xl mx-auto">
           <CardContent className="p-0">
              <Table>
                <TableHeader>
-                 <TableRow className="bg-secondary/30 hover:bg-secondary/30">
+                 <TableRow className="bg-gradient-to-r from-secondary/30 to-accent/20 hover:from-secondary/30 hover:to-accent/20">
                    <TableHead className="py-4 pl-6 font-bold text-foreground">Periode</TableHead>
                    <TableHead className="py-4 text-green-600 font-bold">Pemasukan</TableHead>
                    <TableHead className="py-4 text-red-500 font-bold">Pengeluaran</TableHead>
@@ -47,7 +55,7 @@ export default function LaporanPage() {
                </TableHeader>
                <TableBody>
                  {DATA_KEUANGAN.map((item, i) => (
-                   <TableRow key={i} className="hover:bg-slate-50 font-sans">
+                   <TableRow key={i} className="hover:bg-secondary/10 font-sans transition-colors">
                      <TableCell className="pl-6 py-4 font-medium">{item.bulan}</TableCell>
                      <TableCell className="py-4 text-green-700">{item.masuk}</TableCell>
                      <TableCell className="py-4 text-red-600">{item.keluar}</TableCell>
@@ -62,7 +70,7 @@ export default function LaporanPage() {
                </TableBody>
              </Table>
           </CardContent>
-          <div className="p-6 bg-slate-50 border-t border-border/50 text-center">
+          <div className="p-6 bg-gradient-to-r from-secondary/20 to-accent/10 border-t border-border/50 text-center">
             <p className="text-sm text-muted-foreground flex items-center justify-center gap-2">
               <FileText className="w-4 h-4" />
               Laporan lengkap tersedia di papan pengumuman masjid.

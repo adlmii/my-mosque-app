@@ -16,18 +16,18 @@ export default async function HomePage() {
     <div className="flex flex-col min-h-screen font-optimized overflow-x-hidden">
       
       {/* === HERO SECTION === */}
-      <section className="relative py-20 lg:py-32 bg-secondary/10 overflow-hidden">
+      <section className="relative py-20 lg:py-32 bg-gradient-to-br from-secondary via-white to-accent overflow-hidden">
         {/* Background Blur Decoration */}
-        <div className="absolute inset-0 overflow-hidden opacity-10 pointer-events-none">
-           <div className="absolute -top-[20%] -right-[10%] w-[500px] h-[500px] rounded-full bg-primary blur-3xl animate-pulse"></div>
-           <div className="absolute top-[20%] -left-[10%] w-[300px] h-[300px] rounded-full bg-secondary-foreground/10 blur-3xl"></div>
+        <div className="absolute inset-0 overflow-hidden opacity-30 pointer-events-none">
+           <div className="absolute -top-[20%] -right-[10%] w-[500px] h-[500px] rounded-full bg-primary/20 blur-3xl animate-pulse"></div>
+           <div className="absolute top-[20%] -left-[10%] w-[300px] h-[300px] rounded-full bg-secondary blur-3xl"></div>
         </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           
           <div className="flex flex-col items-center space-y-8 text-center max-w-4xl mx-auto mb-16">
             <FadeIn delay={0.1}>
-              <Badge variant="outline" className="px-5 py-2 text-sm font-bold border-primary/20 text-primary bg-primary/5">
+              <Badge variant="outline" className="px-5 py-2 text-sm font-bold border-primary/20 text-primary bg-white/80 backdrop-blur-sm shadow-sm">
                 أهلا وسهلا
               </Badge>
             </FadeIn>
@@ -53,8 +53,11 @@ export default async function HomePage() {
       </section>
 
       {/* === QUOTE SECTION === */}
-      <section className="py-20 lg:py-24 bg-white border-y border-border/60">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 lg:py-24 bg-white border-y border-border/60 relative overflow-hidden">
+        {/* Subtle Pattern Background */}
+        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(circle, hsl(var(--primary)) 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
+        
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <FadeIn>
             <div className="text-center max-w-4xl mx-auto space-y-6">
               <Quote className="w-12 h-12 text-primary/20 mx-auto" />
@@ -70,11 +73,15 @@ export default async function HomePage() {
       </section>
 
       {/* === TENTANG KAMI SECTION === */}
-      <section className="py-20 lg:py-28 bg-secondary/10">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 lg:py-28 bg-gradient-to-b from-accent/30 to-secondary/20 relative overflow-hidden">
+        {/* Decorative Circles */}
+        <div className="absolute top-10 right-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-10 left-10 w-80 h-80 bg-secondary/30 rounded-full blur-3xl"></div>
+        
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             
-            <FadeIn delay={0.2} className="relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl group border border-border/50">
+            <FadeIn delay={0.2} className="relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl group border border-border/50 bg-white">
               <img 
                 src="/foto-masjid-1.png" 
                 alt="Masjid Exterior" 
@@ -116,8 +123,11 @@ export default async function HomePage() {
       </section>
 
       {/* === KEGIATAN SECTION === */}
-      <section className="py-20 lg:py-24 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 lg:py-24 bg-white relative overflow-hidden">
+        {/* Grid Pattern Background */}
+        <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'linear-gradient(hsl(var(--border)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border)) 1px, transparent 1px)', backgroundSize: '50px 50px' }}></div>
+        
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <FadeIn>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
               <div className="max-w-2xl">
@@ -138,8 +148,8 @@ export default async function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {KEGIATAN_MASJID.map((item, idx) => (
-              <FadeIn key={idx} delay={idx * 0.1}> {/* Staggered animation: kartu muncul bergantian */}
-                <Card className="group overflow-hidden border-border/60 hover:shadow-xl transition-all duration-300 h-full">
+              <FadeIn key={idx} delay={idx * 0.1}>
+                <Card className="group overflow-hidden border-border/60 hover:shadow-xl transition-all duration-300 h-full bg-white">
                   <div className="relative h-56 overflow-hidden">
                     <img 
                       src={item.image} 
@@ -175,9 +185,14 @@ export default async function HomePage() {
       </section>
 
       {/* === CTA DONASI === */}
-      <section className="py-24 lg:py-32 bg-primary relative overflow-hidden text-center">
-        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
+      <section className="py-24 lg:py-32 bg-gradient-to-br from-primary via-primary to-emerald-900 relative overflow-hidden text-center">
+        {/* Pattern Overlay */}
+        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/10 to-transparent pointer-events-none"></div>
+        
+        {/* Floating Shapes */}
+        <div className="absolute top-20 left-20 w-32 h-32 bg-white/5 rounded-full blur-2xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
         
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <FadeIn>
