@@ -4,42 +4,58 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* === BASE COLORS (Canvas) === */
+    --background: 0 0% 100%;       /* Pure White */
+    --foreground: 215 25% 27%;     /* Slate Charcoal (Bukan Hitam Pekat agar tidak lelah di mata) */
 
-    /* HIJAU MASJID (Primary) */
-    --primary: 142.1 76.2% 36.3%;
-    --primary-foreground: 355.7 100% 97.3%;
+    /* === PRIMARY IDENTITY: ROYAL EMERALD === */
+    /* Warna Hijau Zamrud yang dalam, modern, dan menenangkan */
+    --primary: 160 84% 30%;        
+    --primary-foreground: 0 0% 100%; /* Teks Putih di atas Hijau */
 
-    /* WARNA PENDUKUNG */
+    /* === SECONDARY: SAGE MIST === */
+    /* Hijau sangat muda untuk background card/hover, pengganti abu-abu boring */
+    --secondary: 155 30% 96%;
+    --secondary-foreground: 160 84% 30%;
+
+    /* === ACCENT: WARMTH === */
+    /* Sentuhan nuansa membumi untuk elemen interaktif halus */
+    --accent: 155 20% 94%;
+    --accent-foreground: 160 84% 30%;
+
+    /* === UTILITIES & STATES === */
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215 16% 47%;
+
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 215 25% 27%;
     
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --secondary: 142 20% 96%;
-    --secondary-foreground: 142 30% 20%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 142 20% 96%;
-    --accent-foreground: 142 30% 20%;
+    --popover-foreground: 215 25% 27%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 142.1 76.2% 36.3%;
+    /* Border lebih halus dengan nuansa dingin */
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 160 84% 30%; /* Ring fokus mengikuti warna Primary */
 
-    --radius: 0.5rem;
+    --radius: 0.75rem; /* Sedikit lebih bulat (12px) agar terlihat friendly */
   }
 
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
+    
+    --primary: 160 60% 45%; /* Hijau sedikit lebih terang di mode gelap */
+    --primary-foreground: 222.2 47.4% 11.2%;
+    
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
   }
 }
 
@@ -49,15 +65,16 @@
   }
   
   body {
-    @apply bg-background text-foreground antialiased;
+    /* Menambahkan background pattern halus agar tidak flat */
+    @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
   
   /* ============================================
-     TYPOGRAPHY SYSTEM - COMPREHENSIVE SCALE
+     TYPOGRAPHY SYSTEM (DIKUNCI / TIDAK DIUBAH)
      ============================================ */
   
-  /* DISPLAY HEADINGS - Hero Sections */
+  /* DISPLAY HEADINGS */
   .display-xl {
     @apply font-serif text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight text-slate-900 leading-[0.95];
   }
@@ -70,7 +87,7 @@
     @apply font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 leading-[1.05];
   }
 
-  /* HEADING LEVELS - Section Titles */
+  /* HEADING LEVELS */
   h1 {
     @apply font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 leading-tight;
   }
@@ -100,7 +117,7 @@
     @apply font-sans text-base sm:text-lg leading-relaxed text-slate-600 [&:not(:first-child)]:mt-4;
   }
 
-  /* LEAD TEXT - Opening paragraphs */
+  /* LEAD TEXT */
   .lead {
     @apply font-sans text-lg sm:text-xl lg:text-2xl leading-relaxed text-slate-600 font-normal;
   }
@@ -159,9 +176,6 @@
   }
 }
 
-/* ============================================
-   COMPONENT-SPECIFIC TYPOGRAPHY
-   ============================================ */
 @layer components {
   /* Button Typography */
   .btn-text {

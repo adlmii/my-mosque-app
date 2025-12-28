@@ -15,13 +15,13 @@ export default function KegiatanPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-20">
+    <div className="min-h-screen bg-secondary/10 pb-20 font-optimized">
       
       {/* Header */}
-      <div className="bg-white border-b border-slate-200 py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="font-serif text-4xl md:text-5xl font-bold text-slate-900 mb-4">Agenda & Kegiatan</h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+      <div className="bg-white border-b border-border/60 py-16 md:py-20">
+        <div className="container mx-auto px-4 text-center space-y-4">
+          <h1 className="mb-4">Agenda & Kegiatan</h1>
+          <p className="lead max-w-2xl mx-auto">
             Temukan jadwal kajian, kegiatan sosial, dan program pendidikan untuk memakmurkan hari-hari Anda.
           </p>
         </div>
@@ -29,25 +29,25 @@ export default function KegiatanPage() {
 
       <div className="container mx-auto px-4 mt-12">
         <Tabs defaultValue="semua" className="w-full">
-          <div className="flex justify-center mb-8">
-            <TabsList className="grid w-full max-w-[400px] grid-cols-3">
-              <TabsTrigger value="semua">Semua</TabsTrigger>
-              <TabsTrigger value="kajian">Kajian</TabsTrigger>
-              <TabsTrigger value="sosial">Sosial</TabsTrigger>
+          <div className="flex justify-center mb-10">
+            {/* Ubah Background Tabs List */}
+            <TabsList className="grid w-full max-w-[400px] grid-cols-3 h-auto p-1 bg-white border border-border shadow-sm rounded-lg">
+              <TabsTrigger value="semua" className="py-2.5 font-sans font-semibold data-[state=active]:bg-primary data-[state=active]:text-white">Semua</TabsTrigger>
+              <TabsTrigger value="kajian" className="py-2.5 font-sans font-semibold data-[state=active]:bg-primary data-[state=active]:text-white">Kajian</TabsTrigger>
+              <TabsTrigger value="sosial" className="py-2.5 font-sans font-semibold data-[state=active]:bg-primary data-[state=active]:text-white">Sosial</TabsTrigger>
             </TabsList>
           </div>
 
           <TabsContent value="semua" className="mt-0">
-             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {semuaKegiatan.map((item, i) => (
                   <KegiatanCard key={i} data={item} />
                 ))}
              </div>
           </TabsContent>
           
-          {/* Contoh Filter Sederhana (Di real app pakai filter logic) */}
           <TabsContent value="kajian" className="mt-0">
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {semuaKegiatan.filter(k => k.category === 'Kajian').map((item, i) => (
                    <KegiatanCard key={i} data={item} />
                 ))}
@@ -55,7 +55,7 @@ export default function KegiatanPage() {
           </TabsContent>
 
           <TabsContent value="sosial" className="mt-0">
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {semuaKegiatan.filter(k => k.category === 'Sosial').map((item, i) => (
                    <KegiatanCard key={i} data={item} />
                 ))}
@@ -70,36 +70,38 @@ export default function KegiatanPage() {
 // Komponen Kecil untuk Kartu
 function KegiatanCard({ data }: { data: any }) {
   return (
-    <Card className="hover:shadow-lg transition-shadow duration-300 border-slate-200 overflow-hidden flex flex-col h-full">
-      <div className="h-48 bg-slate-200 relative">
-        {/* Placeholder Gambar */}
-        <div className="absolute top-3 left-3">
-          <Badge className="bg-white/90 text-slate-900 hover:bg-white backdrop-blur-sm">
+    <Card className="group hover:shadow-xl transition-all duration-300 border-border overflow-hidden flex flex-col h-full bg-white">
+      <div className="h-52 bg-secondary/30 relative overflow-hidden">
+        <div className="w-full h-full bg-secondary/20 transition-transform duration-700 group-hover:scale-105" />
+        <div className="absolute top-4 left-4">
+          <Badge className="bg-white/95 text-foreground hover:bg-white backdrop-blur-sm shadow-sm font-bold tracking-wide">
              {data.category}
           </Badge>
         </div>
       </div>
-      <CardHeader className="p-5 pb-2">
-        <h3 className="font-serif text-xl font-bold text-slate-900 leading-snug line-clamp-2">
+      <CardHeader className="p-6 pb-3">
+        <h3 className="card-title line-clamp-2 group-hover:text-primary transition-colors">
           {data.title}
         </h3>
       </CardHeader>
-      <CardContent className="p-5 pt-2 space-y-3 flex-1">
-        <div className="flex items-center gap-2 text-sm text-slate-600">
-           <Calendar className="w-4 h-4 text-primary" /> 
-           <span>{data.date}</span>
+      <CardContent className="p-6 pt-2 space-y-3 flex-1">
+        <div className="flex items-center gap-3 text-muted-foreground">
+           <Calendar className="w-4 h-4 text-primary shrink-0" /> 
+           <span className="text-small font-medium">{data.date}</span>
         </div>
-        <div className="flex items-center gap-2 text-sm text-slate-600">
-           <MapPin className="w-4 h-4 text-primary" /> 
-           <span>Masjid Al-Ikhlas</span>
+        <div className="flex items-center gap-3 text-muted-foreground">
+           <MapPin className="w-4 h-4 text-primary shrink-0" /> 
+           <span className="text-small font-medium">Masjid Al-Ikhlas</span>
         </div>
-        <div className="flex items-center gap-2 text-sm text-slate-600">
-           <Clock className="w-4 h-4 text-primary" /> 
-           <span>{data.ustadz}</span>
+        <div className="flex items-center gap-3 text-muted-foreground">
+           <Clock className="w-4 h-4 text-primary shrink-0" /> 
+           <span className="text-small font-medium">{data.ustadz}</span>
         </div>
       </CardContent>
-      <CardFooter className="p-5 pt-0">
-        <Button variant="outline" className="w-full">Detail</Button>
+      <CardFooter className="p-6 pt-0">
+        <Button variant="outline" className="w-full btn-text border-border group-hover:border-primary group-hover:text-primary transition-colors hover:bg-secondary/20">
+            Lihat Detail
+        </Button>
       </CardFooter>
     </Card>
   )

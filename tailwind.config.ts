@@ -24,6 +24,10 @@ const config = {
         serif: ["var(--font-serif)", ...fontFamily.serif],
         arabic: ["var(--font-arabic)", "serif"], 
       },
+      backgroundImage: {
+        'gradient-mosque': 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(165, 80%, 25%) 100%)',
+        'gradient-subtle': 'linear-gradient(to bottom, hsl(var(--secondary)) 0%, hsl(var(--background)) 100%)',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

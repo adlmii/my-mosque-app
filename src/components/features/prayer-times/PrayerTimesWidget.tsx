@@ -21,22 +21,20 @@ export function PrayerTimesWidget({ initialData }: PrayerTimesWidgetProps) {
   ];
 
   return (
-    <div className="w-full max-w-4xl mx-auto mt-8 relative z-20 px-4 md:px-0">
-      {/* Card dengan p-0 untuk hapus white space */}
-      <Card className="border-none shadow-2xl bg-white overflow-hidden ring-1 ring-slate-900/5 p-0">
+    <div className="w-full max-w-4xl mx-auto mt-10 relative z-20 px-4 md:px-0">
+      <Card className="border-none shadow-2xl bg-white overflow-hidden ring-1 ring-slate-900/5 p-0 rounded-2xl">
         
         {/* === HEADER (Hijau) === */}
-        <div className="bg-primary px-6 py-5 flex flex-col md:flex-row justify-between items-center gap-4 text-white">
+        <div className="bg-primary px-6 py-5 flex flex-col md:flex-row justify-between items-center gap-6 text-white">
           
           {/* Lokasi */}
-          <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm">
+          <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10">
             <MapPin className="w-4 h-4 text-white/90" />
-            <span className="font-sans font-medium text-sm tracking-wide">
+            <span className="font-sans font-bold text-sm tracking-wide">
               Jakarta Selatan, WIB
             </span>
           </div>
 
-          {/* Countdown Component */}
           <PrayerCountdown schedules={initialData} />
         </div>
 
@@ -45,20 +43,20 @@ export function PrayerTimesWidget({ initialData }: PrayerTimesWidgetProps) {
           {times.map((t, idx) => (
             <div 
               key={idx} 
-              className="flex-1 flex md:flex-col items-center justify-between md:justify-center p-4 md:py-8 hover:bg-slate-50 transition-colors group"
+              className="flex-1 flex md:flex-col items-center justify-between md:justify-center p-5 md:py-8 hover:bg-secondary/50 transition-colors group cursor-default"
             >
               {/* Ikon & Label */}
-              <div className="flex items-center gap-3 md:gap-2 md:flex-col md:mb-2">
-                <div className="p-2 bg-slate-100 rounded-full text-slate-400 group-hover:text-primary group-hover:bg-primary/10 transition-colors">
+              <div className="flex items-center gap-3 md:gap-2 md:flex-col md:mb-3">
+                <div className="p-2.5 bg-secondary rounded-full text-secondary-foreground/70 group-hover:text-primary-foreground group-hover:bg-primary transition-colors duration-300">
                   {t.icon}
                 </div>
-                <span className="text-sm font-bold uppercase tracking-wider text-slate-500 font-sans">
+                <span className="label text-muted-foreground group-hover:text-primary transition-colors">
                   {t.label}
                 </span>
               </div>
 
               {/* Jam Sholat */}
-              <span className="text-xl md:text-2xl font-bold text-slate-900 font-sans tabular-nums group-hover:scale-110 transition-transform duration-300">
+              <span className="text-2xl md:text-3xl font-bold text-foreground font-sans tabular-nums tracking-tight group-hover:scale-110 transition-transform duration-300">
                 {t.time}
               </span>
             </div>

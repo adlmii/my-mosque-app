@@ -13,7 +13,7 @@ export function PrayerCountdown({ schedules }: { schedules: any }) {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setNextPrayerName("Maghrib");
+      setNextPrayerName("Maghrib"); // Logic placeholder
       
       const now = dayjs();
       const target = dayjs().endOf('day'); 
@@ -27,19 +27,19 @@ export function PrayerCountdown({ schedules }: { schedules: any }) {
   }, [schedules]);
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-4">
       <div className="text-center md:text-right">
-        <p className="text-[10px] md:text-xs uppercase tracking-widest text-primary-foreground/80 font-sans font-semibold mb-1">
+        <p className="text-[11px] uppercase tracking-[0.2em] text-white/80 font-sans font-bold mb-1">
           Menuju {nextPrayerName}
         </p>
-        <p className="text-xl md:text-2xl font-bold font-sans tabular-nums leading-none tracking-tight">
+        <p className="text-2xl md:text-3xl font-bold font-sans tabular-nums leading-none tracking-tight text-white drop-shadow-sm">
           -{displayTime}
         </p>
       </div>
       
       {/* Ikon Animasi */}
-      <div className="hidden md:flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white animate-pulse">
-        <Timer className="w-5 h-5" />
+      <div className="hidden md:flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white animate-pulse border border-white/20 backdrop-blur-sm">
+        <Timer className="w-6 h-6" />
       </div>
     </div>
   );
