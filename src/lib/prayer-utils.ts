@@ -1,20 +1,33 @@
 import dayjs from "@/lib/dayjs";
+import { PrayerTimes } from "@/types/prayer";
 
-export function getCurrentPrayerTime(timings: any) {
+export function getCurrentPrayerTime(timings: PrayerTimes): string {
   const now = dayjs();
-  const getObj = (t: string) => dayjs(t, "HH:mm");
-
-  const subuh = getObj(timings.fajr);
-  const dzuhur = getObj(timings.dhuhr);
-  const ashar = getObj(timings.asr);
-  const maghrib = getObj(timings.maghrib);
-  const isya = getObj(timings.isha);
-
-  if (now.isAfter(subuh) && now.isBefore(dzuhur)) return "Subuh";
-  if (now.isAfter(dzuhur) && now.isBefore(ashar)) return "Dzuhur";
-  if (now.isAfter(ashar) && now.isBefore(maghrib)) return "Ashar";
-  if (now.isAfter(maghrib) && now.isBefore(isya)) return "Maghrib";
   
-  // Default fallback
+  // Helper untuk membuat objek waktu hari ini
+  const time = (t: string) => dayjs(t, "HH:mm");
+
+  const subuh = time(timings.fajr);
+  const dzuhur = time(timings.dhuhr);
+  const ashar = time(timings.asr);
+  const maghrib = time(timings.maghrib);
+  const isya = time(timings.isha);
+  
+  // 1. Jika belum Subuh, berarti masih Isya (periode malam/dini hari)
+  if (now.isBefore(subuh)) return "Isya";
+
+  // 2. Jika belum Dzuhur (tapi sudah lewat Subuh), berarti Subuh
+  if (now.isBefore(dzuhur)) return "Subuh";
+
+  // 3. Jika belum Ashar, berarti Dzuhur
+  if (now.isBefore(ashar)) return "Dzuhur";
+
+  // 4. Jika belum Maghrib, berarti Ashar
+  if (now.isBefore(maghrib)) return "Ashar";
+
+  // 5. Jika belum Isya, berarti Maghrib
+  if (now.isBefore(isya)) return "Maghrib";
+
+  // 6. Jika sudah lewat Isya, berarti Isya
   return "Isya";
 }

@@ -1,5 +1,6 @@
-import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { getPrayerTimes } from "@/services/prayer-api";
 import { PrayerTimesWidget } from "@/components/features/prayer-times/PrayerTimesWidget";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,14 +11,28 @@ import { KEGIATAN_MASJID } from "@/lib/data-kegiatan";
 import { FadeIn } from "@/components/ui/fade-in"; 
 
 export default async function HomePage() {
-  const jadwalDefault = await getPrayerTimes();
+  // Ambil data dari API
+  let jadwalDefault = await getPrayerTimes();
+  
+  // FALLBACK: Jika API gagal/null, pakai data dummy agar widget tetap muncul
+  if (!jadwalDefault) {
+    jadwalDefault = {
+      fajr: "04:30",
+      dhuhr: "12:00",
+      asr: "15:15",
+      maghrib: "18:00",
+      isha: "19:15",
+      imsak: "04:20",
+      sunrise: "05:45",
+      date: "Jadwal Sementara",
+    };
+  }
   
   return (
     <div className="flex flex-col min-h-screen font-optimized overflow-x-hidden">
       
       {/* === HERO SECTION === */}
       <section className="relative py-20 lg:py-32 bg-gradient-to-br from-secondary via-white to-accent overflow-hidden">
-        {/* Background Blur Decoration */}
         <div className="absolute inset-0 overflow-hidden opacity-30 pointer-events-none">
            <div className="absolute -top-[20%] -right-[10%] w-[500px] h-[500px] rounded-full bg-primary/20 blur-3xl animate-pulse"></div>
            <div className="absolute top-[20%] -left-[10%] w-[300px] h-[300px] rounded-full bg-secondary blur-3xl"></div>
@@ -54,7 +69,6 @@ export default async function HomePage() {
 
       {/* === QUOTE SECTION === */}
       <section className="py-20 lg:py-24 bg-white border-y border-border/60 relative overflow-hidden">
-        {/* Subtle Pattern Background */}
         <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(circle, hsl(var(--primary)) 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
         
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -82,10 +96,13 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             
             <FadeIn delay={0.2} className="relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl group border border-border/50 bg-white">
-              <img 
+              <Image 
                 src="/foto-masjid-1.png" 
                 alt="Masjid Exterior" 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="object-cover transition-transform duration-700 group-hover:scale-110"
               />
             </FadeIn>
 

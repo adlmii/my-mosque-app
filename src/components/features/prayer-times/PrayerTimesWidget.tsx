@@ -3,43 +3,36 @@
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { MapPin, Sunrise, Sun, CloudSun, Sunset, MoonStar } from "lucide-react";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import "dayjs/locale/id";
-import { getCurrentPrayerTime } from "@/lib/prayer-utils"; 
-
-dayjs.extend(customParseFormat);
-dayjs.locale("id");
+import { getCurrentPrayerTime } from "@/lib/prayer-utils";
+import { PrayerTimes } from "@/types/prayer";
+import { useCurrentTime } from "@/hooks/use-current-time";
 
 interface PrayerTimesWidgetProps {
-  initialData: any; 
+  initialData: PrayerTimes | null;
 }
 
 export function PrayerTimesWidget({ initialData }: PrayerTimesWidgetProps) {
+  // Gunakan Hook untuk waktu sekarang (Real-time update tiap detik)
+  const now = useCurrentTime();
+  
   const [mounted, setMounted] = useState(false);
-  const [now, setNow] = useState(dayjs());
   const [activePrayer, setActivePrayer] = useState<string>("");
 
   useEffect(() => {
     setMounted(true);
-    if (!initialData) return;
+    
+    // Update status sholat aktif
+    if (initialData) {
+      // Set pertama kali
+      setActivePrayer(getCurrentPrayerTime(initialData));
 
-    const updateTimeAndStatus = () => {
-      // 1. Update Waktu Sekarang
-      setNow(dayjs());
+      // Cek ulang status sholat setiap 1 menit (efisiensi resource)
+      const statusTimer = setInterval(() => {
+        setActivePrayer(getCurrentPrayerTime(initialData));
+      }, 60000);
 
-      // 2. Update Status Sholat Aktif (Logic diambil dari file utils)
-      const currentActive = getCurrentPrayerTime(initialData);
-      setActivePrayer(currentActive);
-    };
-
-    // Jalankan sekali saat mount
-    updateTimeAndStatus();
-
-    // Jalankan setiap detik agar jam terus berjalan
-    const timer = setInterval(updateTimeAndStatus, 1000);
-
-    return () => clearInterval(timer);
+      return () => clearInterval(statusTimer);
+    }
   }, [initialData]);
 
   if (!initialData) return null;
@@ -53,7 +46,7 @@ export function PrayerTimesWidget({ initialData }: PrayerTimesWidgetProps) {
     Isya: <MoonStar className="w-6 h-6" />,
   };
 
-  // Mapping Data Jadwal
+  // Mapping Data
   const prayerMap = [
     { name: "Subuh", time: initialData.fajr },
     { name: "Dzuhur", time: initialData.dhuhr },
@@ -62,31 +55,35 @@ export function PrayerTimesWidget({ initialData }: PrayerTimesWidgetProps) {
     { name: "Isya", time: initialData.isha },
   ];
 
-  if (!mounted) return null;
-
   return (
     <div className="w-full mt-10 relative z-20 font-optimized">
       <Card className="border-none shadow-2xl bg-gradient-to-br from-primary via-primary to-emerald-950 text-primary-foreground overflow-hidden rounded-3xl ring-1 ring-white/20 relative group">
           
-        {/* === Decorative Background Patterns === */}
+        {/* === Decorative Background === */}
         <div className="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none mix-blend-overlay"></div>
         <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-black/20 rounded-full blur-3xl pointer-events-none"></div>
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-soft-light pointer-events-none"></div>
 
         <div className="p-8 md:p-12 relative z-10">
           
-          {/* === Top Section: Jam & Tanggal === */}
           <div className="flex flex-col lg:flex-row justify-between items-center gap-10 mb-12">
             
+            {/* Bagian Kiri: Tanggal */}
             <div className="text-center lg:text-left space-y-3">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-xs font-bold uppercase tracking-widest text-white/90 mb-2 shadow-lg shadow-black/5">
                 <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse box-shadow-glow"></span>
                 Hari Ini
               </div>
               
-              <h2 className="text-4xl md:text-5xl font-serif font-bold text-white leading-tight drop-shadow-sm">
-                {now.format("dddd,")} <br className="hidden md:block" /> 
-                <span className="text-white/90">{now.format("D MMMM YYYY")}</span>
+              <h2 className="text-4xl md:text-5xl font-serif font-bold text-white leading-tight drop-shadow-sm min-h-[3rem]">
+                {mounted ? (
+                  <>
+                    {now.format("dddd,")} <br className="hidden md:block" /> 
+                    <span className="text-white/90">{now.format("D MMMM YYYY")}</span>
+                  </>
+                ) : (
+                  <span className="opacity-0">Loading...</span>
+                )}
               </h2>
               <div className="flex items-center justify-center lg:justify-start gap-2 text-primary-foreground/80 font-sans font-medium pt-2">
                 <MapPin className="w-4 h-4" />
@@ -94,17 +91,18 @@ export function PrayerTimesWidget({ initialData }: PrayerTimesWidgetProps) {
               </div>
             </div>
 
+            {/* Bagian Kanan: Jam Digital */}
             <div className="relative">
               <div className="flex flex-col items-center lg:items-end">
                  <div className="text-7xl md:text-8xl font-bold font-sans tabular-nums tracking-tighter text-white drop-shadow-2xl leading-none">
-                   {now.format("HH:mm")}
+                   {mounted ? now.format("HH:mm") : "--:--"}
                  </div>
                  <p className="text-lg text-primary-foreground/70 font-medium mt-2">Waktu Indonesia Barat</p>
               </div>
             </div>
           </div>
 
-          {/* === Bottom Section: Prayer Cards === */}
+          {/* === Cards Jadwal === */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {prayerMap.map((p, i) => {
               const isActive = activePrayer === p.name;

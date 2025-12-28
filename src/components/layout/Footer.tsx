@@ -52,7 +52,7 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* 4. KONTAK */}
+          {/* 4. KONTAK (DINAMIS DARI DATA MASJID) */}
           <div>
             <h5 className="font-serif font-bold text-foreground mb-6 text-lg">Hubungi Kami</h5>
             <ul className="space-y-5">
@@ -62,11 +62,11 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-3 text-small text-muted-foreground">
                 <Phone className="w-4 h-4 text-primary shrink-0" />
-                <span>+62 812-3456-7890</span>
+                <span>{MASJID_INFO.kontak.telepon}</span>
               </li>
               <li className="flex items-center gap-3 text-small text-muted-foreground">
                 <Mail className="w-4 h-4 text-primary shrink-0" />
-                <span>sekretariat@alhuda.id</span>
+                <span>{MASJID_INFO.kontak.email}</span>
               </li>
             </ul>
           </div>

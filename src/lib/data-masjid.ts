@@ -3,6 +3,13 @@ export const MASJID_INFO = {
   namaSingkat: "Al-Huda",
   tagline: "Pusat Peradaban",
   alamat: "Jl. Daan Mogot No.14, RT.005/RW.002, Batuceper, Tangerang, Banten",
+  kontak: {
+    telepon: "+62 812-3456-7890",
+    email: "sekretariat@alhuda.id",
+    facebook: "MasjidAlHuda",
+    instagram: "@masjidalhuda",
+    youtube: "Al-Huda TV"
+  },
   coordinates: {
     lat: -6.162670251159584,
     lng: 106.66180868074545
