@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, History, Target } from "lucide-react";
+import { MosqueMap } from "@/components/features/contact/MosqueMap";
 
 export default function ProfilPage() {
   return (
@@ -13,7 +14,7 @@ export default function ProfilPage() {
             Tentang Kami
           </Badge>
           <h1 className="mb-6">
-            Mengenal Masjid Al-Ikhlas
+            Mengenal Masjid Jami'<br></br> Al-Huda
           </h1>
           <p className="lead text-balance">
             Lebih dari sekadar tempat sujud, kami adalah rumah bagi komunitas muslim untuk tumbuh, belajar, dan berbagi kebaikan.
@@ -32,7 +33,7 @@ export default function ProfilPage() {
               </div>
               <h2 className="mb-4">Sejarah Singkat</h2>
               <p>
-                Didirikan pada tahun 1998 di atas tanah wakaf seluas 2.000m², Masjid Al-Ikhlas berawal dari sebuah musholla sederhana. Atas gotong royong warga, renovasi besar dilakukan pada tahun 2010.
+                Didirikan pada tahun 1998 di atas tanah wakaf seluas 2.000m², Masjid Jami' Al-Huda berawal dari sebuah musholla sederhana. Atas gotong royong warga, renovasi besar dilakukan pada tahun 2010.
               </p>
               <p>
                 Kini, masjid ini mampu menampung hingga 1.500 jamaah dan menjadi pusat kegiatan keagamaan serta sosial bagi warga sekitar.
@@ -114,7 +115,7 @@ export default function ProfilPage() {
            </div>
         </div>
       </section>
-
+      <MosqueMap />
     </div>
   );
 }

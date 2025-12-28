@@ -16,7 +16,7 @@ export function Footer() {
                 M
               </div>
               <span className="font-serif font-bold text-2xl text-foreground">
-                Al-Ikhlas
+                Al-Huda
               </span>
             </div>
             <p className="text-small text-muted-foreground max-w-xs">
@@ -57,7 +57,7 @@ export function Footer() {
             <ul className="space-y-5">
               <li className="flex items-start gap-3 text-small text-muted-foreground">
                 <MapPin className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                <span>Jl. Damai Sejahtera No. 99, Jakarta Selatan, 12345</span>
+                <span>Jl. Daan Mogot No.14, RT.005/RW.002, Batuceper, Tangerang, Banten 15122</span>
               </li>
               <li className="flex items-center gap-3 text-small text-muted-foreground">
                 <Phone className="w-4 h-4 text-primary shrink-0" />
@@ -73,7 +73,7 @@ export function Footer() {
 
         {/* COPYRIGHT */}
         <div className="border-t border-border/60 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs-custom">© {currentYear} Masjid Al-Ikhlas. All rights reserved.</p>
+          <p className="text-xs-custom">© {currentYear} Masjid Jami' Al-Huda. All rights reserved.</p>
           <div className="flex gap-8 text-xs-custom font-medium">
             <Link href="#" className="hover:text-foreground transition-colors">Privacy Policy</Link>
             <Link href="#" className="hover:text-foreground transition-colors">Terms of Service</Link>
@@ -88,7 +88,6 @@ function SocialLink({ href, icon }: { href: string; icon: React.ReactNode }) {
   return (
     <Link 
       href={href} 
-      // Mengubah bg-slate-50 menjadi bg-secondary (Sage Mist) agar lembut
       className="w-10 h-10 rounded-full bg-secondary border border-border flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 shadow-sm hover:shadow-md"
     >
       {icon}

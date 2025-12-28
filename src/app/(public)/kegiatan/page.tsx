@@ -91,7 +91,7 @@ function KegiatanCard({ data }: { data: any }) {
         </div>
         <div className="flex items-center gap-3 text-muted-foreground">
            <MapPin className="w-4 h-4 text-primary shrink-0" /> 
-           <span className="text-small font-medium">Masjid Al-Ikhlas</span>
+           <span className="text-small font-medium">Masjid Jami' Al-Huda</span>
         </div>
         <div className="flex items-center gap-3 text-muted-foreground">
            <Clock className="w-4 h-4 text-primary shrink-0" /> 

@@ -35,28 +35,30 @@ export default async function HomePage() {
       
       {/* === HERO SECTION === */}
       <section className="relative py-20 lg:py-32 bg-secondary/10 overflow-hidden">
+        {/* Background Blur Decoration */}
         <div className="absolute inset-0 overflow-hidden opacity-10 pointer-events-none">
            <div className="absolute -top-[20%] -right-[10%] w-[500px] h-[500px] rounded-full bg-primary blur-3xl"></div>
-           {/* Ganti Blue-300 jadi Secondary/Darker */}
            <div className="absolute top-[20%] -left-[10%] w-[300px] h-[300px] rounded-full bg-secondary-foreground/10 blur-3xl"></div>
         </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="flex flex-col items-center space-y-8 text-center max-w-4xl mx-auto">
+          
+          <div className="flex flex-col items-center space-y-8 text-center max-w-4xl mx-auto mb-16">
             <Badge variant="outline" className="px-5 py-2 text-sm font-bold border-primary/20 text-primary bg-primary/5">
               أهلا وسهلا
             </Badge>
             
             <h1 className="display-lg">
-              Masjid Al-Ikhlas
+              Masjid Jami' Al-Huda
             </h1>
             
             <p className="lead text-balance max-w-2xl">
               Menjadi pusat peradaban yang memakmurkan bumi dan menyejukkan hati umat. Mari melangkah bersama menuju ridho-Nya.
             </p>
-
-            <PrayerTimesWidget initialData={jadwalDefault} />
           </div>
+
+          <PrayerTimesWidget initialData={jadwalDefault} />
+
         </div>
       </section>
 
@@ -76,7 +78,6 @@ export default async function HomePage() {
       </section>
 
       {/* === TENTANG KAMI SECTION === */}
-      {/* Ganti bg-slate-50 -> bg-secondary/10 (Sage Mist Tipis) */}
       <section className="py-20 lg:py-28 bg-secondary/10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -93,7 +94,7 @@ export default async function HomePage() {
                 Rumah Ibadah yang Nyaman & Modern
               </h2>
               <p className="text-balance text-muted-foreground">
-                Sejak berdiri tahun 1998, Masjid Al-Ikhlas terus berbenah. Kini hadir dengan fasilitas ruang sholat ber-AC, area wudhu bersih, perpustakaan mini, dan akses ramah difabel.
+                Sejak berdiri tahun 1998, Masjid Jami' Al-Huda terus berbenah. Kini hadir dengan fasilitas ruang sholat ber-AC, area wudhu bersih, perpustakaan mini, dan akses ramah difabel.
               </p>
               <ul className="space-y-4 mt-6">
                 {['Parkir Luas & Aman', 'Kajian Rutin Mingguan', 'TPA Berbasis Multimedia'].map((item, i) => (
@@ -103,11 +104,19 @@ export default async function HomePage() {
                    </li>
                 ))}
               </ul>
-              <Button asChild size="lg" className="mt-6 btn-text bg-primary text-primary-foreground hover:bg-primary/90">
+              
+              {/* === TOMBOL DIUPDATE DI SINI === */}
+              <Button 
+                asChild 
+                size="lg" 
+                variant="outline"
+                className="mt-6 btn-text border-primary/20 text-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
+              >
                 <Link href="/profil">
                   Baca Profil Lengkap <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
+
             </div>
           </div>
         </div>
@@ -169,7 +178,6 @@ export default async function HomePage() {
       </section>
 
       {/* === CTA DONASI === */}
-      {/* Gunakan Gradient Primary agar elegan, bukan Hitam/Slate */}
       <section className="py-24 lg:py-32 bg-primary relative overflow-hidden text-center">
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/10 to-transparent pointer-events-none"></div>
@@ -186,7 +194,6 @@ export default async function HomePage() {
               Dukungan Anda sangat berarti untuk operasional masjid dan program santunan sosial yang kami jalankan setiap bulannya.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              {/* Tombol Putih di atas Background Hijau */}
               <Button size="lg" className="bg-white text-primary hover:bg-white/90 btn-text px-8 h-12 shadow-lg">
                 <Heart className="mr-2 h-5 w-5 fill-current" /> Infaq Sekarang
               </Button>

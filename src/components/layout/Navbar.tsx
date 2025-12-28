@@ -30,7 +30,7 @@ export function Navbar() {
             </div>
             <div className="flex flex-col">
               <span className="font-serif font-bold text-xl leading-none text-foreground group-hover:text-primary transition-colors">
-                Al-Ikhlas
+                Al-Huda
               </span>
               <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-sans font-bold mt-1">
                 Pusat Peradaban
