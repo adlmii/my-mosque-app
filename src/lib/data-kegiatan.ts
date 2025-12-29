@@ -1,3 +1,10 @@
+export interface AgendaItem {
+  title: string;
+  category: "Kajian" | "Sosial" | "Pendidikan" | "Ibadah";
+  date: string;
+  ustadz: string;
+}
+
 export const KEGIATAN_MASJID = [
   {
     id: 1,

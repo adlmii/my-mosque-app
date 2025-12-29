@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Lora, Amiri } from "next/font/google"; 
 import "./globals.css";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 import { cn } from "@/lib/utils";
 import { MASJID_INFO } from "@/lib/data-masjid"; 
 
@@ -45,13 +43,7 @@ export default function RootLayout({
         fontSerif.variable,
         fontArabic.variable
       )}>
-        <div className="flex min-h-screen flex-col">
-          <Navbar /> 
-          <main className="flex-1">
-            {children}
-          </main>
-          <Footer />
-        </div>
+        {children}
       </body>
     </html>
   );

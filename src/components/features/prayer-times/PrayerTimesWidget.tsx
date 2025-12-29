@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { MapPin, Sunrise, Sun, CloudSun, Sunset, MoonStar } from "lucide-react";
 import { getCurrentPrayerTime } from "@/lib/prayer-utils";
+import { ReactNode } from "react";
 import { PrayerTimes } from "@/types/prayer";
 import { useCurrentTime } from "@/hooks/use-current-time";
 
@@ -12,9 +13,7 @@ interface PrayerTimesWidgetProps {
 }
 
 export function PrayerTimesWidget({ initialData }: PrayerTimesWidgetProps) {
-  // Gunakan Hook untuk waktu sekarang (Real-time update tiap detik)
   const now = useCurrentTime();
-  
   const [mounted, setMounted] = useState(false);
   const [activePrayer, setActivePrayer] = useState<string>("");
 
@@ -38,7 +37,7 @@ export function PrayerTimesWidget({ initialData }: PrayerTimesWidgetProps) {
   if (!initialData) return null;
 
   // Mapping Ikon
-  const icons: Record<string, any> = {
+  const icons: Record<string, ReactNode> = {
     Subuh: <Sunrise className="w-6 h-6" />,
     Dzuhur: <Sun className="w-6 h-6" />,
     Ashar: <CloudSun className="w-6 h-6" />,

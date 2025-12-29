@@ -7,26 +7,39 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Calendar, Quote, ChevronRight, Heart } from "lucide-react";
 import { MASJID_INFO } from "@/lib/data-masjid";
-import { KEGIATAN_MASJID } from "@/lib/data-kegiatan"; 
-import { FadeIn } from "@/components/ui/fade-in"; 
+import { FadeIn } from "@/components/ui/fade-in";
+import { db } from "@/db";
+import { activities } from "@/db/schema";
+import { desc } from "drizzle-orm";
+import dayjs from "@/lib/dayjs";
+
+export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  // Ambil data dari API
+  // Jadwal Sholat (API)
   let jadwalDefault = await getPrayerTimes();
   
-  // FALLBACK: Jika API gagal/null, pakai data dummy agar widget tetap muncul
+  // Fallback jika API error
   if (!jadwalDefault) {
     jadwalDefault = {
-      fajr: "04:30",
-      dhuhr: "12:00",
-      asr: "15:15",
-      maghrib: "18:00",
-      isha: "19:15",
-      imsak: "04:20",
-      sunrise: "05:45",
-      date: "Jadwal Sementara",
+      fajr: "04:30", dhuhr: "12:00", asr: "15:15", maghrib: "18:00", isha: "19:15",
+      imsak: "04:20", sunrise: "05:45", date: "Jadwal Sementara",
     };
   }
+
+  // Kegiatan Terbaru
+  const activitiesData = await db
+    .select()
+    .from(activities)
+    .orderBy(desc(activities.date))
+    .limit(3);
+
+  // Format Data 
+  const latestActivities = activitiesData.map((item) => ({
+    ...item,
+    formattedDate: dayjs(item.date).format("D MMMM YYYY"),
+    image: item.imageUrl || "https://images.unsplash.com/photo-1609599006353-e629aaabfeae?q=80&w=600&auto=format&fit=crop"
+  }));
   
   return (
     <div className="flex flex-col min-h-screen font-optimized overflow-x-hidden">
@@ -164,39 +177,46 @@ export default async function HomePage() {
           </FadeIn>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {KEGIATAN_MASJID.map((item, idx) => (
-              <FadeIn key={idx} delay={idx * 0.1}>
-                <Card className="group overflow-hidden border-border/60 hover:shadow-xl transition-all duration-300 h-full bg-white">
-                  <div className="relative h-56 overflow-hidden">
-                    <img 
-                      src={item.image} 
-                      alt={item.title} 
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <Badge className="absolute top-4 right-4 bg-white/95 text-foreground hover:bg-white shadow-sm backdrop-blur-sm font-bold text-xs">
-                      {item.category}
-                    </Badge>
-                  </div>
-                  <CardContent className="p-6 space-y-4">
-                    <div className="flex items-center gap-2 text-sm text-primary font-bold">
-                        <Calendar className="h-4 w-4" /> {item.date}
+            {latestActivities.length > 0 ? (
+              latestActivities.map((item, idx) => (
+                <FadeIn key={item.id} delay={idx * 0.1}>
+                  <Card className="group overflow-hidden border-border/60 hover:shadow-xl transition-all duration-300 h-full bg-white flex flex-col">
+                    <div className="relative h-56 overflow-hidden">
+                      <img 
+                        src={item.image} 
+                        alt={item.title} 
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <Badge className="absolute top-4 right-4 bg-white/95 text-foreground hover:bg-white shadow-sm backdrop-blur-sm font-bold text-xs">
+                        {item.category}
+                      </Badge>
                     </div>
-                    <h3 className="card-title group-hover:text-primary transition-colors line-clamp-2">
-                      {item.title}
-                    </h3>
-                    <div className="pt-2 flex items-center text-sm text-muted-foreground group-hover:text-primary transition-colors font-bold">
-                        Detail Kegiatan <ChevronRight className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1" />
-                    </div>
-                  </CardContent>
-                </Card>
-              </FadeIn>
-            ))}
+                    <CardContent className="p-6 space-y-4 flex flex-col flex-1">
+                      <div className="flex items-center gap-2 text-sm text-primary font-bold">
+                          <Calendar className="h-4 w-4" /> {item.formattedDate}
+                      </div>
+                      <h3 className="card-title group-hover:text-primary transition-colors line-clamp-2">
+                        {item.title}
+                      </h3>
+                      <div className="pt-2 mt-auto flex items-center text-sm text-muted-foreground group-hover:text-primary transition-colors font-bold">
+                          Detail Kegiatan <ChevronRight className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </FadeIn>
+              ))
+            ) : (
+              // Empty State kalau belum ada data
+              <div className="col-span-full text-center py-10 bg-gray-50 rounded-xl border border-dashed">
+                <p className="text-muted-foreground">Belum ada agenda kegiatan.</p>
+              </div>
+            )}
           </div>
           
           <div className="mt-8 text-center md:hidden">
-             <Button variant="outline" asChild className="w-full btn-text">
-               <Link href="/kegiatan">Lihat Semua Agenda</Link>
-             </Button>
+              <Button variant="outline" asChild className="w-full btn-text">
+                <Link href="/kegiatan">Lihat Semua Agenda</Link>
+              </Button>
           </div>
         </div>
       </section>

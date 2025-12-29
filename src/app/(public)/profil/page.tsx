@@ -30,8 +30,11 @@ export default function ProfilPage() {
             <Badge variant="outline" className="mb-6 px-4 py-1.5 border-primary/20 bg-white/80 backdrop-blur-sm text-primary">
               Tentang Kami
             </Badge>
-            <h1 className="mb-6">
-              Mengenal Masjid {MASJID_INFO.namaSingkat}
+            <h1 className="mb-6 leading-tight">
+              Mengenal Sejarah
+              <span className="block mt-2 text-primary">
+                {MASJID_INFO.nama}
+              </span>
             </h1>
             <p className="lead text-balance">
               Lebih dari sekadar tempat sujud, kami adalah rumah bagi komunitas muslim untuk tumbuh, belajar, dan berbagi kebaikan.
