@@ -95,5 +95,6 @@ export async function updateActivity(formData: FormData) {
     return { error: "Gagal mengupdate database." };
   }
 
+  revalidatePath("/admin/kegiatan");
   redirect("/admin/kegiatan");
 }
