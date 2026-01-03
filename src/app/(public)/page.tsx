@@ -3,9 +3,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getPrayerTimes } from "@/services/prayer-api";
 import { PrayerTimesWidget } from "@/components/features/prayer-times/PrayerTimesWidget";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"; // Tambahkan CardHeader, CardFooter
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Calendar, Quote, ChevronRight, Heart } from "lucide-react";
+import { ArrowRight, Calendar, Quote, ChevronRight, Heart, MapPin, User, Clock, Repeat } from "lucide-react"; // Tambah MapPin, User, Clock, Repeat
 import { MASJID_INFO } from "@/lib/data-masjid";
 import { FadeIn } from "@/components/ui/fade-in";
 import { db } from "@/db";
@@ -31,20 +31,38 @@ export default async function HomePage() {
   const activitiesData = await db
     .select()
     .from(activities)
-    .orderBy(desc(activities.date))
+    .orderBy(desc(activities.createdAt)) // Urutkan by created terbaru
     .limit(3);
 
-  // Format Data 
-  const latestActivities = activitiesData.map((item) => ({
-    ...item,
-    formattedDate: dayjs(item.date).format("D MMMM YYYY"),
-    image: item.imageUrl || "https://images.unsplash.com/photo-1609599006353-e629aaabfeae?q=80&w=600&auto=format&fit=crop"
-  }));
+  // Helper untuk format data agar konsisten dengan card
+  const latestActivities = activitiesData.map((item) => {
+    const isRutin = item.frequency === "rutin";
+    let dateText = "";
+    let timeText = "";
+
+    if (isRutin) {
+        dateText = `Setiap ${item.dayOfWeek ? item.dayOfWeek.charAt(0).toUpperCase() + item.dayOfWeek.slice(1) : "-"}`;
+        // Regex cek jam
+        const isJam = /^\d{1,2}[:.]\d{2}$/.test(item.time || ""); 
+        timeText = item.time ? (isJam ? `${item.time} WIB` : item.time) : "";
+    } else {
+        dateText = item.date ? dayjs(item.date).format("D MMMM YYYY") : "Segera";
+        timeText = item.date ? dayjs(item.date).format("HH:mm") + " WIB" : "";
+    }
+
+    return {
+        ...item,
+        isRutin,
+        dateText,
+        timeText,
+        image: item.imageUrl
+    };
+  });
   
   return (
     <div className="flex flex-col min-h-screen font-optimized overflow-x-hidden">
       
-      {/* === HERO SECTION === */}
+      {/* === HERO SECTION (Tetap Sama) === */}
       <section className="relative py-20 lg:py-32 bg-gradient-to-br from-secondary via-white to-accent overflow-hidden">
         <div className="absolute inset-0 overflow-hidden opacity-30 pointer-events-none">
            <div className="absolute -top-[20%] -right-[10%] w-[500px] h-[500px] rounded-full bg-primary/20 blur-3xl animate-pulse"></div>
@@ -80,7 +98,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* === QUOTE SECTION === */}
+      {/* === QUOTE SECTION (Tetap Sama) === */}
       <section className="py-20 lg:py-24 bg-white border-y border-border/60 relative overflow-hidden">
         <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(circle, hsl(var(--primary)) 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
         
@@ -99,9 +117,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* === TENTANG KAMI SECTION === */}
+      {/* === TENTANG KAMI SECTION (Tetap Sama) === */}
       <section className="py-20 lg:py-28 bg-gradient-to-b from-accent/30 to-secondary/20 relative overflow-hidden">
-        {/* Decorative Circles */}
         <div className="absolute top-10 right-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
         <div className="absolute bottom-10 left-10 w-80 h-80 bg-secondary/30 rounded-full blur-3xl"></div>
         
@@ -152,9 +169,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* === KEGIATAN SECTION === */}
+      {/* === KEGIATAN SECTION (YANG DI-UPDATE) === */}
       <section className="py-20 lg:py-24 bg-white relative overflow-hidden">
-        {/* Grid Pattern Background */}
         <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'linear-gradient(hsl(var(--border)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border)) 1px, transparent 1px)', backgroundSize: '50px 50px' }}></div>
         
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -180,33 +196,86 @@ export default async function HomePage() {
             {latestActivities.length > 0 ? (
               latestActivities.map((item, idx) => (
                 <FadeIn key={item.id} delay={idx * 0.1}>
-                  <Card className="group overflow-hidden border-border/60 hover:shadow-xl transition-all duration-300 h-full bg-white flex flex-col">
-                    <div className="relative h-56 overflow-hidden">
-                      <img 
-                        src={item.image} 
-                        alt={item.title} 
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                      <Badge className="absolute top-4 right-4 bg-white/95 text-foreground hover:bg-white shadow-sm backdrop-blur-sm font-bold text-xs">
-                        {item.category}
-                      </Badge>
+                  <Card className="group hover:shadow-xl transition-all duration-300 border-border overflow-hidden flex flex-col h-full bg-white/95 backdrop-blur-sm py-0 gap-0">
+                    
+                    {/* Image Header */}
+                    <div className="relative w-full h-48 bg-gradient-to-br from-secondary/20 to-accent/10 overflow-hidden shrink-0">
+                        {item.image ? (
+                           <img 
+                               src={item.image} 
+                               alt={item.title} 
+                               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                           />
+                        ) : (
+                           <div className="w-full h-full flex items-center justify-center bg-secondary/10 group-hover:bg-secondary/20 transition-colors">
+                              <Calendar className="w-12 h-12 text-primary/10" />
+                           </div>
+                        )}
+                        
+                        {/* Badge Kategori & Rutin */}
+                        <div className="absolute top-3 left-3 flex gap-2 z-10">
+                            <Badge className="bg-white/95 text-foreground hover:bg-white backdrop-blur-sm shadow-sm font-bold tracking-wide border-0 px-2 py-0.5 text-[10px] uppercase">
+                                {item.category}
+                            </Badge>
+                            {item.isRutin && (
+                                <Badge variant="secondary" className="bg-blue-500/90 text-white backdrop-blur-sm shadow-sm font-bold tracking-wide border-0 px-2 py-0.5 text-[10px] uppercase">
+                                    Rutin
+                                </Badge>
+                            )}
+                        </div>
+
+                        {/* Badge Jam */}
+                        {item.timeText && (
+                            <div className="absolute top-3 right-3 z-10">
+                                <Badge variant="secondary" className="bg-black/60 text-white backdrop-blur-md shadow-sm font-mono font-medium tracking-wide border-0 px-2 py-1 flex items-center gap-1.5">
+                                    <Clock className="w-3 h-3 text-white/80" />
+                                    {item.timeText}
+                                </Badge>
+                            </div>
+                        )}
                     </div>
-                    <CardContent className="p-6 space-y-4 flex flex-col flex-1">
-                      <div className="flex items-center gap-2 text-sm text-primary font-bold">
-                          <Calendar className="h-4 w-4" /> {item.formattedDate}
-                      </div>
-                      <h3 className="card-title group-hover:text-primary transition-colors line-clamp-2">
+
+                    <CardHeader className="p-5 pb-2 pt-5">
+                      <h3 className="card-title text-lg font-bold line-clamp-2 group-hover:text-primary transition-colors leading-snug">
                         {item.title}
                       </h3>
-                      <div className="pt-2 mt-auto flex items-center text-sm text-muted-foreground group-hover:text-primary transition-colors font-bold">
-                          Detail Kegiatan <ChevronRight className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1" />
-                      </div>
+                    </CardHeader>
+
+                    <CardContent className="p-5 pt-2 space-y-2.5 flex-1">
+                        {/* Tanggal */}
+                        <div className="flex items-center gap-2.5 text-muted-foreground">
+                            {item.isRutin ? (
+                                <Repeat className="w-4 h-4 text-blue-500 shrink-0" /> 
+                            ) : (
+                                <Calendar className="w-4 h-4 text-primary shrink-0" /> 
+                            )}
+                            <span className={`text-sm font-medium ${item.isRutin ? "text-blue-700" : "text-foreground/80"}`}>
+                                {item.dateText}
+                            </span>
+                        </div>
+
+                        {/* Lokasi */}
+                        <div className="flex items-center gap-2.5 text-muted-foreground">
+                            <MapPin className="w-4 h-4 text-primary shrink-0" /> 
+                            <span className="text-sm font-medium">{item.location || "Masjid Jami' Al-Huda"}</span>
+                        </div>
+
+                        {/* Ustadz */}
+                        <div className="flex items-center gap-2.5 text-muted-foreground">
+                            <User className="w-4 h-4 text-primary shrink-0" /> 
+                            <span className="text-sm font-medium">{item.ustadz || "Tim DKM"}</span>
+                        </div>
                     </CardContent>
+
+                    <CardFooter className="p-5 pt-0 pb-5"> 
+                        <Button variant="outline" className="w-full border-border group-hover:border-primary group-hover:text-primary transition-colors hover:bg-secondary/10 h-10 rounded-lg font-semibold text-sm">
+                            Lihat Detail
+                        </Button>
+                    </CardFooter>
                   </Card>
                 </FadeIn>
               ))
             ) : (
-              // Empty State kalau belum ada data
               <div className="col-span-full text-center py-10 bg-gray-50 rounded-xl border border-dashed">
                 <p className="text-muted-foreground">Belum ada agenda kegiatan.</p>
               </div>
@@ -223,11 +292,8 @@ export default async function HomePage() {
 
       {/* === CTA DONASI === */}
       <section className="py-24 lg:py-32 bg-gradient-to-br from-primary via-primary to-emerald-900 relative overflow-hidden text-center">
-        {/* Pattern Overlay */}
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/10 to-transparent pointer-events-none"></div>
-        
-        {/* Floating Shapes */}
         <div className="absolute top-20 left-20 w-32 h-32 bg-white/5 rounded-full blur-2xl animate-pulse"></div>
         <div className="absolute bottom-20 right-20 w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
         

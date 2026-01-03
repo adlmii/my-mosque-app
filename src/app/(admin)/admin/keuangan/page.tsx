@@ -93,9 +93,9 @@ export default async function AdminKeuanganPage() {
           <TableHeader>
             <TableRow className="bg-muted/40 hover:bg-muted/40 border-b border-border/60">
               <TableHead className="w-[60px] text-center h-12 font-semibold text-muted-foreground text-xs uppercase tracking-wider">No</TableHead>
+              {/* Kolom Jenis dihapus, digabung ke sini */}
               <TableHead className="h-12 font-semibold text-muted-foreground text-xs uppercase tracking-wider">Keterangan & Kategori</TableHead>
               <TableHead className="h-12 font-semibold text-muted-foreground text-xs uppercase tracking-wider w-[180px]">Tanggal</TableHead>
-              <TableHead className="h-12 font-semibold text-muted-foreground text-xs uppercase tracking-wider w-[120px]">Jenis</TableHead>
               <TableHead className="text-right h-12 font-semibold text-muted-foreground text-xs uppercase tracking-wider w-[180px]">Nominal</TableHead>
               <TableHead className="text-right h-12 font-semibold text-muted-foreground text-xs uppercase tracking-wider pr-6 w-[80px]">Aksi</TableHead>
             </TableRow>
@@ -107,7 +107,8 @@ export default async function AdminKeuanganPage() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={6} className="h-[300px] text-center">
+                {/* colspan dikurangi jadi 5 karena kolom Jenis dihapus */}
+                <TableCell colSpan={5} className="h-[300px] text-center">
                    <div className="flex flex-col items-center justify-center gap-3">
                     <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center text-muted-foreground/50 mb-2">
                         <Wallet className="w-8 h-8" />

@@ -3,16 +3,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, User, MapPin } from "lucide-react";
+import { Calendar, User, MapPin, Repeat, Clock } from "lucide-react";
 import { FadeIn } from "@/components/ui/fade-in";
-
-// --- Imports Database & Utilities ---
 import { db } from "@/db"; 
 import { activities } from "@/db/schema";
 import { desc } from "drizzle-orm";
 import dayjs from "@/lib/dayjs"; 
 
-// Pastikan data selalu fresh (tidak di-cache statis) saat user buka halaman
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
@@ -21,18 +18,30 @@ export const metadata: Metadata = {
 };
 
 export default async function KegiatanPage() {
-  // 1. Ambil data dari Database (Server Side)
-  // Kita urutkan berdasarkan tanggal terbaru (descending)
   const activitiesData = await db
     .select()
     .from(activities)
-    .orderBy(desc(activities.date));
+    .orderBy(desc(activities.createdAt));
 
-  // 2. Format Tanggal agar enak dibaca (misal: "Senin, 1 Jan 2024...")
-  const formattedData = activitiesData.map((item) => ({
-    ...item,
-    formattedDate: dayjs(item.date).format("dddd, D MMMM YYYY • HH:mm") + " WIB",
-  }));
+  const formattedData = activitiesData.map((item) => {
+    let dateDisplay = "";
+    let isRutin = item.frequency === "rutin";
+
+    if (isRutin) {
+      const hari = item.dayOfWeek ? item.dayOfWeek.charAt(0).toUpperCase() + item.dayOfWeek.slice(1) : "-";
+      dateDisplay = `Setiap ${hari}, ${item.time}`;
+    } else {
+      dateDisplay = item.date 
+        ? dayjs(item.date).format("dddd, D MMMM YYYY • HH:mm") + " WIB"
+        : "Waktu belum ditentukan";
+    }
+
+    return {
+      ...item,
+      formattedDate: dateDisplay,
+      isRutin: isRutin
+    };
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-secondary/10 via-white to-accent/20 pb-20 font-optimized relative overflow-hidden">
@@ -68,7 +77,7 @@ export default async function KegiatanPage() {
             </div>
           </FadeIn>
 
-          {/* Render Grid dengan Data Database */}
+          {/* Render Grid */}
           <TabsContent value="semua" className="mt-0">
              <KegiatanGrid data={formattedData} />
           </TabsContent>
@@ -109,50 +118,91 @@ function KegiatanGrid({ data }: { data: any[] }) {
   );
 }
 
-// Komponen Kartu
 function KegiatanCard({ data }: { data: any }) {
+  let dateText = "";
+  let timeText = "";
+
+  if (data.isRutin) {
+      dateText = `Setiap ${data.dayOfWeek ? data.dayOfWeek.charAt(0).toUpperCase() + data.dayOfWeek.slice(1) : "-"}`;
+      const isJam = /^\d{1,2}[:.]\d{2}$/.test(data.time);
+      timeText = data.time ? (isJam ? `${data.time} WIB` : data.time) : "";
+  } else {
+      dateText = data.date ? dayjs(data.date).format("D MMMM YYYY") : "Segera";
+      timeText = data.date ? dayjs(data.date).format("HH:mm") + " WIB" : "";
+  }
+
   return (
-    <Card className="group hover:shadow-xl transition-all duration-300 border-border overflow-hidden flex flex-col h-full bg-white/95 backdrop-blur-sm">
-      <div className="h-40 bg-gradient-to-br from-secondary/20 to-accent/10 relative overflow-hidden">
-        {/* Abstract Pattern Placeholder */}
-        <div className="w-full h-full bg-secondary/20 transition-transform duration-700 group-hover:scale-105" />
+    <Card className="group hover:shadow-xl transition-all duration-300 border-border overflow-hidden flex flex-col h-full bg-white/95 backdrop-blur-sm py-0 gap-0"> 
+      
+      {/* Image Header */}
+      <div className="relative w-full h-40 bg-gradient-to-br from-secondary/20 to-accent/10 overflow-hidden shrink-0">
+        {data.imageUrl ? (
+           <img 
+             src={data.imageUrl} 
+             alt={data.title} 
+             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+           />
+        ) : (
+           <div className="w-full h-full bg-secondary/20 transition-transform duration-700 group-hover:scale-105" />
+        )}
         
         {/* Badge Kategori */}
-        <div className="absolute top-4 left-4">
-          <Badge className="bg-white/95 text-foreground hover:bg-white backdrop-blur-sm shadow-sm font-bold tracking-wide border-0">
+        <div className="absolute top-3 left-3 flex gap-2 z-10">
+          <Badge className="bg-white/90 text-foreground hover:bg-white backdrop-blur-sm shadow-sm font-bold tracking-wide border-0 px-2 py-0.5 text-[10px] uppercase">
              {data.category}
           </Badge>
+          {data.isRutin && (
+             <Badge variant="secondary" className="bg-blue-500/90 text-white backdrop-blur-sm shadow-sm font-bold tracking-wide border-0 px-2 py-0.5 text-[10px] uppercase">
+               Rutin
+             </Badge>
+          )}
         </div>
+
+        {/* Badge Jam */}
+        {timeText && (
+            <div className="absolute top-3 right-3 z-10">
+                <Badge variant="secondary" className="bg-black/60 text-white backdrop-blur-md shadow-sm font-mono font-medium tracking-wide border-0 px-2 py-1 flex items-center gap-1.5">
+                    <Clock className="w-3 h-3 text-white/80" />
+                    {timeText}
+                </Badge>
+            </div>
+        )}
       </div>
 
-      <CardHeader className="p-6 pb-3">
-        <h3 className="card-title text-xl line-clamp-2 group-hover:text-primary transition-colors">
+      <CardHeader className="p-5 pb-2 pt-5"> 
+        <h3 className="card-title text-lg font-bold line-clamp-2 group-hover:text-primary transition-colors leading-snug">
           {data.title}
         </h3>
       </CardHeader>
       
-      <CardContent className="p-6 pt-2 space-y-3 flex-1">
-        {/* Waktu */}
-        <div className="flex items-start gap-3 text-muted-foreground">
-           <Calendar className="w-4 h-4 text-primary shrink-0 mt-0.5" /> 
-           <span className="text-sm font-medium leading-tight">{data.formattedDate}</span>
+      <CardContent className="p-5 pt-2 space-y-2.5 flex-1">
+        {/* Tanggal */}
+        <div className="flex items-center gap-2.5 text-muted-foreground">
+           {data.isRutin ? (
+              <Repeat className="w-4 h-4 text-blue-500 shrink-0" /> 
+           ) : (
+              <Calendar className="w-4 h-4 text-primary shrink-0" /> 
+           )}
+           <span className={`text-sm font-medium ${data.isRutin ? "text-blue-700" : "text-foreground/80"}`}>
+              {dateText}
+           </span>
         </div>
         
         {/* Lokasi */}
-        <div className="flex items-start gap-3 text-muted-foreground">
-           <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" /> 
-           <span className="text-sm font-medium leading-tight">{data.location || "Masjid Jami' Al-Huda"}</span>
+        <div className="flex items-center gap-2.5 text-muted-foreground">
+           <MapPin className="w-4 h-4 text-primary shrink-0" /> 
+           <span className="text-sm font-medium">{data.location || "Masjid Jami' Al-Huda"}</span>
         </div>
         
-        {/* Ustadz / Penanggung Jawab */}
-        <div className="flex items-start gap-3 text-muted-foreground">
-           <User className="w-4 h-4 text-primary shrink-0 mt-0.5" /> 
-           <span className="text-sm font-medium leading-tight">{data.ustadz || "Tim DKM"}</span>
+        {/* Ustadz */}
+        <div className="flex items-center gap-2.5 text-muted-foreground">
+           <User className="w-4 h-4 text-primary shrink-0" /> 
+           <span className="text-sm font-medium">{data.ustadz || "Tim DKM"}</span>
         </div>
       </CardContent>
       
-      <CardFooter className="p-6 pt-0">
-        <Button variant="outline" className="w-full border-border group-hover:border-primary group-hover:text-primary transition-colors hover:bg-secondary/10">
+      <CardFooter className="p-5 pt-0 pb-5"> 
+        <Button variant="outline" className="w-full border-border group-hover:border-primary group-hover:text-primary transition-colors hover:bg-secondary/10 h-10 rounded-lg font-semibold text-sm">
             Lihat Detail
         </Button>
       </CardFooter>

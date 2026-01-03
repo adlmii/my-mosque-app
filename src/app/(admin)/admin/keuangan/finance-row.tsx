@@ -27,15 +27,34 @@ export function FinanceRow({ item, index }: FinanceRowProps) {
         {index + 1}
       </TableCell>
       
-      {/* Detail Transaksi */}
+      {/* Detail Transaksi (Judul + Kategori + Jenis) */}
       <TableCell>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1.5">
           <span className="font-semibold text-foreground text-base group-hover:text-primary transition-colors line-clamp-1">
             {item.title}
           </span>
-          <Badge variant="outline" className="w-fit rounded-md px-2 py-0 text-[10px] uppercase tracking-wider font-bold border-border/60 text-muted-foreground bg-background/50">
-            {item.category}
-          </Badge>
+          <div className="flex items-center gap-2">
+              {/* Badge Kategori */}
+              <Badge variant="outline" className="w-fit rounded-md px-2 py-0 text-[10px] uppercase tracking-wider font-bold border-border/60 text-muted-foreground bg-background/50">
+                {item.category}
+              </Badge>
+              
+              {/* Badge Jenis (Masuk/Keluar) DIPINDAHKAN KESINI */}
+              <Badge 
+                variant="secondary" 
+                className={`font-bold border-0 px-2 py-0 h-5 rounded-md text-[10px] uppercase tracking-wide shadow-none inline-flex items-center gap-1 ${
+                    isMasuk 
+                    ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20" 
+                    : "bg-red-50 text-red-700 ring-1 ring-red-600/20"
+                }`}
+              >
+                {isMasuk ? (
+                    <><ArrowUpRight className="w-3 h-3" /> Masuk</>
+                ) : (
+                    <><ArrowDownRight className="w-3 h-3" /> Keluar</>
+                )}
+              </Badge>
+          </div>
         </div>
       </TableCell>
       
@@ -49,22 +68,6 @@ export function FinanceRow({ item, index }: FinanceRowProps) {
         </div>
       </TableCell>
       
-      {/* Tipe Badge */}
-      <TableCell>
-        <Badge 
-          variant="outline" 
-          className={`font-bold border-0 px-2 py-1 rounded-lg text-[10px] uppercase tracking-wide shadow-none inline-flex items-center gap-1 ${
-            isMasuk ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20" : "bg-red-50 text-red-700 ring-1 ring-red-600/20"
-          }`}
-        >
-          {isMasuk ? (
-            <><ArrowUpRight className="w-3 h-3" /> Masuk</>
-          ) : (
-            <><ArrowDownRight className="w-3 h-3" /> Keluar</>
-          )}
-        </Badge>
-      </TableCell>
-
       {/* Nominal dengan Font Mono */}
       <TableCell className={`font-mono font-bold text-right whitespace-nowrap text-base ${isMasuk ? "text-emerald-600" : "text-red-600"}`}>
         {isMasuk ? "+ " : "- "}{formatRupiah(item.amount)}
