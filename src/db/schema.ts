@@ -13,6 +13,12 @@ export const financeCategoryEnum = pgEnum("finance_category", [
   "Lainnya"
 ]);
 
+// Enum untuk Frekuensi dan Hari
+export const frequencyEnum = pgEnum("frequency", ["rutin", "insidental"]);
+export const dayOfWeekEnum = pgEnum("day_of_week", [
+  "ahad", "senin", "selasa", "rabu", "kamis", "jumat", "sabtu"
+]);
+
 // --- Tabel Kegiatan (Agenda) ---
 export const activities = pgTable("activities", {
   id: serial("id").primaryKey(),
@@ -22,10 +28,14 @@ export const activities = pgTable("activities", {
   description: text("description"),
   ustadz: varchar("ustadz", { length: 100 }),
   location: varchar("location", { length: 255 }).default("Masjid Jami' Al-Huda"),
-  date: timestamp("date").notNull(),
   imageUrl: text("image_url"),
   isFeatured: boolean("is_featured").default(false),
   createdAt: timestamp("created_at").defaultNow(),
+  frequency: frequencyEnum("frequency").default("insidental").notNull(),
+  
+  date: timestamp("date"), 
+  dayOfWeek: dayOfWeekEnum("day_of_week"), 
+  time: varchar("time", { length: 50 }), 
 });
 
 // --- Tabel Users (Admin DKM) ---

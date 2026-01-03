@@ -14,7 +14,7 @@ export const metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function AdminKegiatanPage() {
-  const data = await db.select().from(activities).orderBy(desc(activities.date));
+  const data = await db.select().from(activities).orderBy(desc(activities.createdAt));
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500 pb-10">
@@ -44,10 +44,15 @@ export default async function AdminKegiatanPage() {
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/40 hover:bg-muted/40 border-b border-border/60">
-              <TableHead className="w-[60px] text-center h-12 font-semibold text-muted-foreground text-xs uppercase tracking-wider">No</TableHead>
+              <TableHead className="w-[50px] text-center h-12 font-semibold text-muted-foreground text-xs uppercase tracking-wider">No</TableHead>
+              {/* Kolom 1: Detail Utama */}
               <TableHead className="h-12 font-semibold text-muted-foreground text-xs uppercase tracking-wider">Detail Kegiatan</TableHead>
+              {/* Kolom 2 (BARU): Jenis & Kategori */}
+              <TableHead className="h-12 font-semibold text-muted-foreground text-xs uppercase tracking-wider w-[180px]">Jenis & Kategori</TableHead>
+              {/* Kolom 3: Waktu */}
               <TableHead className="h-12 font-semibold text-muted-foreground text-xs uppercase tracking-wider w-[250px]">Waktu Pelaksanaan</TableHead>
-              <TableHead className="h-12 text-right font-semibold text-muted-foreground text-xs uppercase tracking-wider pr-6 w-[100px]">Aksi</TableHead>
+              {/* Kolom 4: Aksi */}
+              <TableHead className="h-12 text-right font-semibold text-muted-foreground text-xs uppercase tracking-wider pr-6 w-[80px]">Aksi</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -58,7 +63,7 @@ export default async function AdminKegiatanPage() {
             ) : (
               // Empty State
               <TableRow>
-                <TableCell colSpan={4} className="h-[400px] text-center">
+                <TableCell colSpan={5} className="h-[400px] text-center">
                   <div className="flex flex-col items-center justify-center gap-4 max-w-sm mx-auto">
                     <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center text-muted-foreground mb-2">
                         <Calendar className="w-8 h-8 opacity-50" />

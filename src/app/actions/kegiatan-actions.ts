@@ -24,30 +24,65 @@ export async function deleteActivity(id: number) {
 
 // --- 2. TAMBAH KEGIATAN BARU ---
 export async function createActivity(formData: FormData) {
+  // Ambil data umum
   const title = formData.get("title") as string;
-  const category = formData.get("category") as any; // "Kajian", "Sosial", dll
-  const dateStr = formData.get("date") as string;
+  const category = formData.get("category") as any;
+  const description = formData.get("description") as string;
   const ustadz = formData.get("ustadz") as string;
   const location = formData.get("location") as string;
   const imageUrl = formData.get("imageUrl") as string;
-  const description = formData.get("description") as string;
+  
+  // Ambil jenis frekuensi (rutin / insidental)
+  const frequency = formData.get("frequency") as "rutin" | "insidental";
 
-  if (!title || !dateStr || !category) {
-    return { error: "Mohon lengkapi data wajib." };
+  // Validasi Data Dasar
+  if (!title || !category || !frequency) {
+    return { error: "Mohon lengkapi data wajib (Judul, Kategori, Jenis)." };
+  }
+
+  // Siapkan variabel untuk logic percabangan
+  let dateValue: Date | null = null;
+  let dayOfWeekValue: any = null;
+  let timeValue: string | null = null;
+
+  // LOGIC PERCABANGAN
+  if (frequency === "rutin") {
+    // Jika Rutin: Wajib punya Hari & Jam
+    const day = formData.get("dayOfWeek") as string;
+    const time = formData.get("time") as string;
+
+    if (!day || !time) {
+      return { error: "Untuk kegiatan rutin, Hari dan Jam wajib diisi." };
+    }
+    dayOfWeekValue = day;
+    timeValue = time;
+
+  } else {
+    // Jika Insidental: Wajib punya Tanggal Lengkap
+    const dateStr = formData.get("date") as string;
+    
+    if (!dateStr) {
+      return { error: "Untuk kegiatan waktu tertentu, Tanggal wajib diisi." };
+    }
+    dateValue = new Date(dateStr);
   }
 
   try {
     await db.insert(activities).values({
       title,
       category,
-      date: new Date(dateStr),
+      description: description || "",
       ustadz: ustadz || "-",
       location: location || "Masjid Jami' Al-Huda",
       imageUrl: imageUrl || "",
-      description: description || "",
+      
+      // Data Baru
+      frequency,
+      date: dateValue,       // Terisi jika insidental
+      dayOfWeek: dayOfWeekValue, // Terisi jika rutin
+      time: timeValue,           // Terisi jika rutin
     });
 
-    // Refresh halaman terkait
     revalidatePath("/admin/kegiatan");
     revalidatePath("/kegiatan");
     revalidatePath("/");
@@ -64,14 +99,33 @@ export async function updateActivity(formData: FormData) {
   const id = formData.get("id") as string;
   const title = formData.get("title") as string;
   const category = formData.get("category") as any;
-  const dateStr = formData.get("date") as string;
+  const description = formData.get("description") as string;
   const ustadz = formData.get("ustadz") as string;
   const location = formData.get("location") as string;
   const imageUrl = formData.get("imageUrl") as string;
-  const description = formData.get("description") as string;
 
-  if (!id || !title || !dateStr) {
+  const frequency = formData.get("frequency") as "rutin" | "insidental";
+
+  if (!id || !title || !category || !frequency) {
     return { error: "Data tidak lengkap." };
+  }
+
+  let dateValue: Date | null = null;
+  let dayOfWeekValue: any = null;
+  let timeValue: string | null = null;
+
+  if (frequency === "rutin") {
+    const day = formData.get("dayOfWeek") as string;
+    const time = formData.get("time") as string;
+    if (!day || !time) return { error: "Hari dan Jam wajib diisi." };
+    
+    dayOfWeekValue = day;
+    timeValue = time;
+  } else {
+    const dateStr = formData.get("date") as string;
+    if (!dateStr) return { error: "Tanggal wajib diisi." };
+    
+    dateValue = new Date(dateStr);
   }
 
   try {
@@ -79,11 +133,14 @@ export async function updateActivity(formData: FormData) {
       .set({
         title,
         category,
-        date: new Date(dateStr),
+        description,
         ustadz,
         location,
         imageUrl,
-        description,
+        frequency,
+        date: dateValue,
+        dayOfWeek: dayOfWeekValue,
+        time: timeValue,
       })
       .where(eq(activities.id, parseInt(id)));
 
@@ -95,6 +152,5 @@ export async function updateActivity(formData: FormData) {
     return { error: "Gagal mengupdate database." };
   }
 
-  revalidatePath("/admin/kegiatan");
   redirect("/admin/kegiatan");
 }
